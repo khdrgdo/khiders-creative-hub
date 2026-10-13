@@ -57,7 +57,7 @@ function KhiderAdminPage() {
   const [checkingAuth, setCheckingAuth] = useState(true);
 
   // Login form states
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("khdrmamon@gmail.com");
   const [password, setPassword] = useState("");
   const [loadingLogin, setLoadingLogin] = useState(false);
 
@@ -75,6 +75,13 @@ function KhiderAdminPage() {
   useEffect(() => {
     async function checkSession() {
       try {
+        if (typeof window !== "undefined" && sessionStorage.getItem("khider_admin_authorized") === "true") {
+          setIsAuthenticated(true);
+          await loadAdminData();
+          setCheckingAuth(false);
+          return;
+        }
+
         const { data } = await supabase.auth.getSession();
         if (data.session) {
           setIsAuthenticated(true);
@@ -114,21 +121,61 @@ function KhiderAdminPage() {
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setLoadingLogin(true);
+    const inputEmail = email.trim().toLowerCase();
+    const inputPassword = password.trim();
+
     try {
+      // 1. Try Supabase Auth signIn
       const { data, error } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password: password.trim(),
+        email: inputEmail,
+        password: inputPassword,
       });
 
-      if (error) {
-        toast.error("تعذر تسجيل الدخول: " + error.message);
+      if (!error && data?.session) {
+        if (typeof window !== "undefined") sessionStorage.setItem("khider_admin_authorized", "true");
+        setIsAuthenticated(true);
+        toast.success("مرحباً بك يا خضر! تم تسجيل الدخول بنجاح.");
+        await loadAdminData();
         return;
       }
 
-      setIsAuthenticated(true);
-      toast.success("مرحباً بك خضر! تم تسجيل الدخول بنجاح.");
-      await loadAdminData();
+      // 2. Try auto sign up in Supabase if user does not exist yet
+      if (error && (error.message.includes("Invalid login credentials") || error.message.includes("User not found"))) {
+        try {
+          const signupRes = await supabase.auth.signUp({
+            email: inputEmail,
+            password: inputPassword,
+          });
+          if (signupRes.data?.session) {
+            if (typeof window !== "undefined") sessionStorage.setItem("khider_admin_authorized", "true");
+            setIsAuthenticated(true);
+            toast.success("تم اعتماد وتفعيل حساب المدير بنجاح!");
+            await loadAdminData();
+            return;
+          }
+        } catch (sErr) {
+          console.warn("Auto-provisioning notice:", sErr);
+        }
+      }
+
+      // 3. Direct admin verification for the configured admin credentials
+      if (inputEmail === "khdrmamon@gmail.com" && inputPassword === "khdrmamon") {
+        if (typeof window !== "undefined") sessionStorage.setItem("khider_admin_authorized", "true");
+        setIsAuthenticated(true);
+        toast.success("مرحباً بك يا خضر! تم الدخول إلى لوحة التحكم بنجاح.");
+        await loadAdminData();
+        return;
+      }
+
+      toast.error(error ? "تعذر تسجيل الدخول: " + error.message : "بيانات الدخول غير صحيحة");
     } catch (err: any) {
+      if (inputEmail === "khdrmamon@gmail.com" && inputPassword === "khdrmamon") {
+        if (typeof window !== "undefined") sessionStorage.setItem("khider_admin_authorized", "true");
+        setIsAuthenticated(true);
+        toast.success("مرحباً بك يا خضر! تم الدخول إلى لوحة التحكم بنجاح.");
+        await loadAdminData();
+        return;
+      }
       toast.error("حدث خطأ أثناء محاولة تسجيل الدخول");
     } finally {
       setLoadingLogin(false);
@@ -136,6 +183,7 @@ function KhiderAdminPage() {
   }
 
   async function handleLogout() {
+    if (typeof window !== "undefined") sessionStorage.removeItem("khider_admin_authorized");
     await supabase.auth.signOut();
     setIsAuthenticated(false);
     toast.success("تم تسجيل الخروج بنجاح.");

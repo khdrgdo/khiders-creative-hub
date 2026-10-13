@@ -17,6 +17,7 @@ create policy "own roles readable" on public.user_roles for select to authentica
 create table public.admin_allowlist (email text primary key);
 grant all on public.admin_allowlist to service_role;
 alter table public.admin_allowlist enable row level security;
+insert into public.admin_allowlist(email) values ('khdrmamon@gmail.com') on conflict do nothing;
 
 create or replace function public.has_role(_user_id uuid, _role app_role)
 returns boolean language sql stable security definer set search_path = public as $$
