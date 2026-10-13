@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { siteQuery } from "@/lib/queries";
 import { mergeSettings } from "@/lib/content-helper";
+import { useLiveSettings } from "@/lib/content-store";
 import { CheckCircle2, Compass, BookOpen, Code, Sparkles, Terminal } from "lucide-react";
 
 export const Route = createFileRoute("/about")({
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/about")({
 
 function AboutPage() {
   const { data: siteData } = useQuery(siteQuery);
-  const settings = mergeSettings(siteData?.settings);
+  const settings = useLiveSettings(mergeSettings(siteData?.settings));
 
   return (
     <div className="py-8 sm:py-16 max-w-3xl space-y-16">

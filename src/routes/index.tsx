@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { siteQuery, homeContentQuery } from "@/lib/queries";
 import { mergeSettings, filterByType } from "@/lib/content-helper";
+import { useLiveContent, useLiveSettings } from "@/lib/content-store";
 import { HeroSection } from "@/components/public/HeroSection";
 import { BooksSection } from "@/components/public/BooksSection";
 import { ProjectsSection } from "@/components/public/ProjectsSection";
@@ -19,8 +20,8 @@ function IndexPage() {
   const { data: siteData } = useQuery(siteQuery);
   const { data: homeItems } = useQuery(homeContentQuery);
 
-  const settings = mergeSettings(siteData?.settings);
-  const items = (homeItems as ContentItem[]) || [];
+  const settings = useLiveSettings(mergeSettings(siteData?.settings));
+  const items = useLiveContent((homeItems as ContentItem[]) || []);
 
   const books = filterByType(items, "book");
   const projects = filterByType(items, "project");

@@ -2,11 +2,19 @@ import { Link } from "@tanstack/react-router";
 import { BookMarked, Code2, Feather, Compass, ArrowDown, Sparkles } from "lucide-react";
 import type { SiteSettings } from "@/lib/site-types";
 
+import { useLiveContent } from "@/lib/content-store";
+import { filterByType } from "@/lib/content-helper";
+
 interface HeroSectionProps {
   settings: SiteSettings;
 }
 
 export function HeroSection({ settings }: HeroSectionProps) {
+  const allItems = useLiveContent();
+  const booksCount = filterByType(allItems, "book").length;
+  const projectsCount = filterByType(allItems, "project").length;
+  const researchCount = filterByType(allItems, "research").length;
+
   return (
     <section className="pt-10 pb-16 sm:pt-16 sm:pb-24 max-w-4xl">
       {/* Top Status & Date */}
@@ -22,10 +30,10 @@ export function HeroSection({ settings }: HeroSectionProps) {
       {/* Main High-Impact Typography */}
       <div className="space-y-4 mb-8">
         <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-foreground leading-[1.2]">
-          أنا <span className="text-primary underline decoration-lavender/80 underline-offset-8">{settings.siteName}</span>.
+          أنا <span className="text-primary underline decoration-lavender/80 underline-offset-8">{settings.siteName || "خضر مأمون"}</span>.
         </h1>
         <p className="font-display text-xl sm:text-2xl md:text-3xl text-foreground/80 leading-relaxed font-normal">
-          {settings.tagline}
+          {settings.tagline || "مبرمج، كاتب، وباحث مستقل"}
         </p>
       </div>
 
@@ -41,17 +49,17 @@ export function HeroSection({ settings }: HeroSectionProps) {
         <div className="px-3.5 py-1.5 rounded-lg border border-border/70 bg-card flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-primary" />
           <span className="text-muted-foreground">الكتب:</span>
-          <span className="font-bold text-foreground">٣ مجلدات</span>
+          <span className="font-bold text-foreground">{booksCount} إصدارات</span>
         </div>
         <div className="px-3.5 py-1.5 rounded-lg border border-border/70 bg-card flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-primary" />
           <span className="text-muted-foreground">البرمجيات:</span>
-          <span className="font-bold text-foreground">مفتوحة المصدر</span>
+          <span className="font-bold text-foreground">{projectsCount} مشاريع حرة</span>
         </div>
         <div className="px-3.5 py-1.5 rounded-lg border border-border/70 bg-card flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-primary" />
           <span className="text-muted-foreground">الأبحاث:</span>
-          <span className="font-bold text-foreground">لسانيات حاسوبية</span>
+          <span className="font-bold text-foreground">{researchCount} أوراق عمل</span>
         </div>
       </div>
 

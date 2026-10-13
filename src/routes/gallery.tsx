@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { homeContentQuery } from "@/lib/queries";
 import { filterByType } from "@/lib/content-helper";
+import { useLiveContent } from "@/lib/content-store";
 import { GallerySection } from "@/components/public/GallerySection";
 import type { ContentItem } from "@/lib/site-types";
 
@@ -20,7 +21,8 @@ export const Route = createFileRoute("/gallery")({
 
 function GalleryPage() {
   const { data: items } = useQuery(homeContentQuery);
-  const gallery = filterByType(items as ContentItem[], "gallery");
+  const liveItems = useLiveContent((items as ContentItem[]) || []);
+  const gallery = filterByType(liveItems, "gallery");
 
   return (
     <div className="py-8 sm:py-16 space-y-10">

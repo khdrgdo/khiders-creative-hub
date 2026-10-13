@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { Menu, X, ArrowUpRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+import { useLiveSettings } from "@/lib/content-store";
+
 const navLinks = [
   { label: "الرئيسية", to: "/" },
   { label: "عنّي", to: "/about" },
@@ -18,6 +20,7 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
+  const settings = useLiveSettings();
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -33,11 +36,11 @@ export function Navbar() {
           className="group flex flex-col justify-center transition-opacity hover:opacity-90 focus:outline-none"
         >
           <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-            خضر مأمون
+            {settings.siteName || "خضر مأمون"}
           </span>
           <span className="text-[11px] font-sans text-muted-foreground/80 tracking-wide flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-            <span>فِكْر وشَفْرَة</span>
+            <span>{settings.tagline || "فِكْر وشَفْرَة"}</span>
           </span>
         </Link>
 

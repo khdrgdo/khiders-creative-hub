@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { siteQuery } from "@/lib/queries";
 import { mergeSettings } from "@/lib/content-helper";
+import { useLiveSettings } from "@/lib/content-store";
 import { ContactSection } from "@/components/public/ContactSection";
 
 export const Route = createFileRoute("/contact")({
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/contact")({
 
 function ContactPage() {
   const { data: siteData } = useQuery(siteQuery);
-  const settings = mergeSettings(siteData?.settings);
+  const settings = useLiveSettings(mergeSettings(siteData?.settings));
 
   return (
     <div className="py-8 sm:py-16 space-y-10">

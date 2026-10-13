@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { homeContentQuery } from "@/lib/queries";
 import { filterByType } from "@/lib/content-helper";
+import { useLiveContent } from "@/lib/content-store";
 import { ProjectsSection } from "@/components/public/ProjectsSection";
 import type { ContentItem } from "@/lib/site-types";
 
@@ -20,7 +21,8 @@ export const Route = createFileRoute("/projects")({
 
 function ProjectsPage() {
   const { data: items } = useQuery(homeContentQuery);
-  const projects = filterByType(items as ContentItem[], "project");
+  const liveItems = useLiveContent((items as ContentItem[]) || []);
+  const projects = filterByType(liveItems, "project");
 
   return (
     <div className="py-8 sm:py-16 space-y-10">

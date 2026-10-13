@@ -1,8 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { Github, Twitter, Linkedin, Mail, ArrowUpRight } from "lucide-react";
 
+import { useLiveSettings } from "@/lib/content-store";
+
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const settings = useLiveSettings();
 
   return (
     <footer className="mt-24 sm:mt-32 border-t border-border/60 bg-muted/20">
@@ -11,11 +14,10 @@ export function Footer() {
           {/* Identity & Statement */}
           <div className="md:col-span-6 space-y-3">
             <h3 className="font-display text-2xl font-bold text-foreground">
-              خضر مأمون
+              {settings.siteName || "خضر مأمون"}
             </h3>
             <p className="text-sm font-sans text-muted-foreground leading-relaxed max-w-md">
-              مبرمج، كاتب، وباحث مستقل. مساحة رقمية تعنى بهندسة البرمجيات،
-              وفلسفة التقنية، وجماليات اللغة والفكر العربي المعاصر.
+              {settings.tagline || "مبرمج، كاتب، وباحث مستقل. مساحة رقمية تعنى بهندسة البرمجيات، وفلسفة التقنية، وجماليات اللغة والفكر العربي المعاصر."}
             </p>
             <div className="pt-2 flex items-center gap-4 text-xs text-muted-foreground">
               <span>الخرطوم ➔ الشتات ➔ الفضاء الرقمي</span>
@@ -101,17 +103,9 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-border/40 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-          <p>© {currentYear} خضر مأمون. جميع الحقوق محفوظة.</p>
+          <p>© {currentYear} {settings.siteName || "خضر مأمون"}. جميع الحقوق محفوظة.</p>
           <div className="flex items-center gap-3">
             <span>صُنع بعناية وهدوء</span>
-            <span>•</span>
-            <Link
-              to="/khider"
-              className="text-muted-foreground/40 hover:text-muted-foreground transition-colors"
-              title="إدارة الموقع"
-            >
-              مدخل الإدارة
-            </Link>
           </div>
         </div>
       </div>
