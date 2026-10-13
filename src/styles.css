@@ -42,32 +42,34 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --shadow-soft: 0 20px 50px -30px color-mix(in oklab, var(--primary) 45%, transparent);
+  --shadow-soft: 0 16px 36px -18px color-mix(in oklab, var(--primary) 28%, transparent);
+  --shadow-book: -6px 8px 24px -4px rgba(60, 40, 90, 0.16), -2px 2px 6px 0px rgba(60, 40, 90, 0.08);
+  --shadow-frame: 0 8px 28px -6px rgba(45, 30, 75, 0.08), 0 2px 6px 0 rgba(45, 30, 75, 0.04);
 }
 
 :root {
-  --radius: 0.75rem;
-  --background: oklch(0.986 0.006 305);
-  --foreground: oklch(0.26 0.04 295);
-  --ink: oklch(0.2 0.04 295);
-  --card: oklch(0.995 0.003 305);
-  --card-foreground: oklch(0.26 0.04 295);
-  --popover: oklch(0.995 0.003 305);
-  --popover-foreground: oklch(0.26 0.04 295);
-  --primary: oklch(0.52 0.11 295);
-  --primary-foreground: oklch(0.985 0.005 305);
-  --secondary: oklch(0.955 0.02 305);
-  --secondary-foreground: oklch(0.32 0.06 295);
-  --muted: oklch(0.96 0.012 305);
-  --muted-foreground: oklch(0.5 0.03 295);
-  --accent: oklch(0.93 0.035 303);
-  --accent-foreground: oklch(0.3 0.07 295);
-  --lavender: oklch(0.88 0.05 303);
+  --radius: 0.85rem;
+  --background: oklch(0.988 0.005 300);
+  --foreground: oklch(0.24 0.035 295);
+  --ink: oklch(0.18 0.04 295);
+  --card: oklch(0.998 0.002 300);
+  --card-foreground: oklch(0.24 0.035 295);
+  --popover: oklch(0.998 0.002 300);
+  --popover-foreground: oklch(0.24 0.035 295);
+  --primary: oklch(0.48 0.12 295);
+  --primary-foreground: oklch(0.99 0.003 300);
+  --secondary: oklch(0.96 0.018 300);
+  --secondary-foreground: oklch(0.3 0.05 295);
+  --muted: oklch(0.962 0.01 300);
+  --muted-foreground: oklch(0.48 0.025 295);
+  --accent: oklch(0.94 0.028 300);
+  --accent-foreground: oklch(0.28 0.06 295);
+  --lavender: oklch(0.89 0.045 300);
   --destructive: oklch(0.58 0.2 25);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.91 0.018 303);
-  --input: oklch(0.9 0.02 303);
-  --ring: oklch(0.62 0.1 295);
+  --border: oklch(0.915 0.015 300);
+  --input: oklch(0.905 0.018 300);
+  --ring: oklch(0.58 0.09 295);
   --sidebar: oklch(0.975 0.004 280);
   --sidebar-foreground: oklch(0.25 0.02 280);
   --sidebar-primary: oklch(0.45 0.08 290);
@@ -78,7 +80,7 @@
   --sidebar-ring: oklch(0.6 0.06 290);
 }
 
-/* Admin dashboard: neutral, utilitarian theme separate from the public site */
+/* Admin dashboard theme */
 .admin-theme {
   --background: oklch(0.975 0.003 280);
   --foreground: oklch(0.22 0.015 280);
@@ -108,6 +110,9 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    background-image: radial-gradient(circle at 10% 0%, color-mix(in oklab, var(--lavender) 18%, transparent) 0%, transparent 40%),
+                      radial-gradient(circle at 90% 80%, color-mix(in oklab, var(--accent) 22%, transparent) 0%, transparent 45%);
+    background-attachment: fixed;
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
@@ -115,66 +120,97 @@
     line-height: 1.35;
   }
   ::selection {
-    background: var(--lavender);
+    background: color-mix(in oklab, var(--lavender) 85%, transparent);
+    color: var(--ink);
   }
 }
 
-@utility eyebrow {
-  font-family: var(--font-sans);
-  font-size: 0.78rem;
-  letter-spacing: 0.04em;
+/* 3D Book Cover styling for editorial feel */
+.book-cover-3d {
+  position: relative;
+  box-shadow: var(--shadow-book);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  transform-origin: center right;
+}
+.book-cover-3d::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 14px;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.22) 0%, rgba(255, 255, 255, 0.12) 35%, transparent 100%);
+  pointer-events: none;
+}
+.book-cover-3d:hover {
+  transform: translateY(-4px) rotateY(-4deg);
+  box-shadow: -10px 14px 30px -4px rgba(60, 40, 90, 0.22);
+}
+
+/* Fine-art photography frame (Passe-partout) */
+.art-frame {
+  position: relative;
+  background: var(--card);
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-frame);
+  transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+.art-frame:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in oklab, var(--primary) 40%, var(--border));
+  box-shadow: 0 16px 36px -10px rgba(50, 30, 80, 0.12);
+}
+
+/* Editorial Index Number */
+.editorial-num {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
   color: var(--primary);
+  opacity: 0.85;
 }
 
 @utility rule-ornament {
   height: 1px;
-  background: linear-gradient(to left, transparent, var(--lavender), transparent);
-}
-
-@utility fade-up {
-  animation: fade-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  background: linear-gradient(to left, transparent, color-mix(in oklab, var(--lavender) 85%, transparent), transparent);
 }
 
 @utility lift {
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.25s ease;
   &:hover {
     transform: translateY(-3px);
     box-shadow: var(--shadow-soft);
   }
 }
 
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
 /* Long-form Arabic reading */
 .prose-ar {
-  font-size: 1.08rem;
-  line-height: 2.05;
+  font-size: 1.12rem;
+  line-height: 2.15;
   color: var(--foreground);
 }
-.prose-ar > * + * { margin-top: 1.1em; }
-.prose-ar h2 { font-size: 1.6rem; margin-top: 1.8em; }
-.prose-ar h3 { font-size: 1.3rem; margin-top: 1.5em; }
+.prose-ar > * + * { margin-top: 1.25em; }
+.prose-ar h2 { font-size: 1.75rem; margin-top: 2em; margin-bottom: 0.6em; }
+.prose-ar h3 { font-size: 1.4rem; margin-top: 1.6em; margin-bottom: 0.5em; }
 .prose-ar a { color: var(--primary); text-decoration: underline; text-underline-offset: 4px; }
 .prose-ar blockquote {
-  border-inline-start: 3px solid var(--lavender);
-  padding-inline-start: 1.2rem;
+  border-inline-start: 3px solid var(--primary);
+  padding-inline-start: 1.4rem;
+  margin-block: 1.5rem;
   font-family: var(--font-display);
-  font-size: 1.3rem;
-  color: var(--accent-foreground);
+  font-size: 1.35rem;
+  line-height: 1.8;
+  color: var(--ink);
+  background: color-mix(in oklab, var(--accent) 35%, transparent);
+  padding-block: 0.75rem;
+  border-radius: 0 8px 8px 0;
 }
 .prose-ar ul { list-style: disc; padding-inline-start: 1.5rem; }
 .prose-ar ol { list-style: decimal; padding-inline-start: 1.5rem; }
-.prose-ar code { background: var(--muted); padding: 0.1em 0.4em; border-radius: 4px; font-size: 0.9em; direction: ltr; unicode-bidi: embed; }
-.prose-ar pre { background: var(--muted); padding: 1rem; border-radius: var(--radius); overflow-x: auto; direction: ltr; text-align: left; }
+.prose-ar code { background: var(--muted); padding: 0.15em 0.45em; border-radius: 4px; font-size: 0.9em; direction: ltr; unicode-bidi: embed; }
+.prose-ar pre { background: var(--muted); padding: 1.2rem; border-radius: var(--radius); overflow-x: auto; direction: ltr; text-align: left; }
 .prose-ar img { border-radius: var(--radius); }
 
 @media (prefers-reduced-motion: reduce) {
