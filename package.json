@@ -12,7 +12,8 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "mcp": "bun run scripts/mcp-server.ts"
+    "mcp": "bun run scripts/mcp-server.ts",
+    "mcp:http": "bun run scripts/mcp-http-server.ts"
   },
   "overrides": {
     "rolldown": "1.2.1"
