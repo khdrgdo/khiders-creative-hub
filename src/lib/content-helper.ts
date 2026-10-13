@@ -31,9 +31,13 @@ export function mergeSettings(dbSettings: unknown): SiteSettings {
 }
 
 export function filterByType(items: ContentItem[] | null | undefined, type: ContentType): ContentItem[] {
-  let source = items && items.length > 0 ? items : defaultContentItems;
-  if (typeof window !== "undefined") {
+  let source: ContentItem[] = [];
+  if (items && items.length > 0) {
+    source = items;
+  } else if (typeof window !== "undefined") {
     source = getStoredItems();
+  } else {
+    source = defaultContentItems;
   }
   return source.filter((item) => item.type === type && item.status === "published");
 }
@@ -43,9 +47,13 @@ export function findBySlug(
   type: ContentType,
   slug: string
 ): ContentItem | undefined {
-  let source = items && items.length > 0 ? items : defaultContentItems;
-  if (typeof window !== "undefined") {
+  let source: ContentItem[] = [];
+  if (items && items.length > 0) {
+    source = items;
+  } else if (typeof window !== "undefined") {
     source = getStoredItems();
+  } else {
+    source = defaultContentItems;
   }
   return source.find((item) => item.type === type && item.slug === slug);
 }

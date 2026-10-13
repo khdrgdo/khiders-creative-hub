@@ -396,8 +396,8 @@ export default {
       });
     }
 
-    // Message handler for SSE
-    if (request.method === "POST" && url.pathname === "/messages") {
+    // Message handler for SSE and direct JSON-RPC
+    if (request.method === "POST" && (url.pathname === "/messages" || url.pathname === "/sse" || url.pathname === "/" || url.pathname === "/mcp")) {
       const sessionId = url.searchParams.get("sessionId");
       const sessionSend = sessionId ? sessions.get(sessionId) : null;
       let body = {};
@@ -409,10 +409,10 @@ export default {
 
       if (sessionSend && rpcResult) {
         sessionSend(`event: message\ndata: ${JSON.stringify(rpcResult)}\n\n`);
-        return new Response("Accepted", { status: 202, headers: corsHeaders });
       }
 
       return new Response(JSON.stringify(rpcResult || {}), {
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }

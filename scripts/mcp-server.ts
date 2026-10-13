@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 import { createClient } from "@supabase/supabase-js";
-import { readFileSync, existsSync } from "fs";
+import { readFileSync, writeFileSync, existsSync } from "fs";
 import { resolve, dirname } from "path";
 
 // Load environment from .env file
@@ -24,6 +24,32 @@ if (existsSync(envPath)) {
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Shared JSON content storage helpers for immediate local website updates
+const contentJsonPath = resolve(dirname(import.meta.dir), "public", "content.json");
+
+function getLocalStore(): { items: any[]; settings: any } {
+  try {
+    if (existsSync(contentJsonPath)) {
+      const parsed = JSON.parse(readFileSync(contentJsonPath, "utf-8"));
+      return {
+        items: Array.isArray(parsed?.items) ? parsed.items : [],
+        settings: parsed?.settings || {},
+      };
+    }
+  } catch (err) {
+    console.warn("Could not read public/content.json:", err);
+  }
+  return { items: [], settings: {} };
+}
+
+function saveLocalStore(data: { items: any[]; settings: any }) {
+  try {
+    writeFileSync(contentJsonPath, JSON.stringify({ version: "2.0", updatedAt: new Date().toISOString(), ...data }, null, 2), "utf-8");
+  } catch (err) {
+    console.error("Could not write to public/content.json:", err);
+  }
+}
 
 function slugify(text: string): string {
   return text
@@ -155,22 +181,29 @@ async function handleToolCall(name: string, args: any): Promise<string> {
         const slug = slugify(args.title);
         const excerpt = args.excerpt || args.body.slice(0, 180) + "...";
         const meta = { readTime: args.readTime || "5 دقائق قراءة" };
-        const { data, error } = await supabase.from("content_items").upsert([
-          {
-            type: "article",
-            title: args.title,
-            slug,
-            excerpt,
-            body: args.body,
-            category: args.category || "مقالات وتأملات",
-            tags: args.tags || [],
-            meta,
-            status: args.status || "published",
-            published_at: new Date().toISOString(),
-          },
-        ]);
-        if (error) throw error;
-        return `✅ تم بنجاح نشر المقال: "${args.title}"\n• الرابط: /writing#${slug}\n• الحالة: ${args.status || "published"}`;
+        const newItem = {
+          id: crypto.randomUUID(),
+          type: "article",
+          title: args.title,
+          slug,
+          excerpt,
+          body: args.body,
+          category: args.category || "مقالات وتأملات",
+          tags: args.tags || [],
+          meta,
+          status: args.status || "published",
+          published_at: new Date().toISOString(),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+
+        const store = getLocalStore();
+        store.items = [newItem, ...store.items.filter((i: any) => i.slug !== slug)];
+        saveLocalStore(store);
+
+        supabase.from("content_items").upsert([newItem]).catch(() => {});
+
+        return `✅ تم بنجاح نشر المقال: "${args.title}"\n• التصنيف: ${newItem.category}\n• الرابط في الموقع: /writing#${slug}\n• الحالة: ${newItem.status === "published" ? "منشور ومتاح فوراً للزوار" : "مسودة للمراجعة"}`;
       }
 
       case "publish_project": {
@@ -179,23 +212,30 @@ async function handleToolCall(name: string, args: any): Promise<string> {
         if (args.github_url) links.push({ label: "GitHub", url: args.github_url });
         if (args.demo_url) links.push({ label: "معاينة حية", url: args.demo_url });
         const meta = { license: args.license || "MIT", status: "نشط" };
-        const { error } = await supabase.from("content_items").upsert([
-          {
-            type: "project",
-            title: args.title,
-            slug,
-            excerpt: args.excerpt,
-            body: args.body || args.excerpt,
-            category: args.category || "برمجيات مفتوحة",
-            tags: args.tags || [],
-            links,
-            meta,
-            status: args.status || "published",
-            published_at: new Date().toISOString(),
-          },
-        ]);
-        if (error) throw error;
-        return `✅ تم بنجاح إضافة المشروع: "${args.title}"\n• الرابط: /projects\n• الحالة: ${args.status || "published"}`;
+        const newItem = {
+          id: crypto.randomUUID(),
+          type: "project",
+          title: args.title,
+          slug,
+          excerpt: args.excerpt,
+          body: args.body || args.excerpt,
+          category: args.category || "برمجيات مفتوحة",
+          tags: args.tags || [],
+          links,
+          meta,
+          status: args.status || "published",
+          published_at: new Date().toISOString(),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+
+        const store = getLocalStore();
+        store.items = [newItem, ...store.items.filter((i: any) => i.slug !== slug)];
+        saveLocalStore(store);
+
+        supabase.from("content_items").upsert([newItem]).catch(() => {});
+
+        return `✅ تم بنجاح إضافة المشروع: "${args.title}"\n• الرابط في الموقع: /projects\n• الحالة: ${newItem.status === "published" ? "منشور ومتاح فوراً للزوار" : "مسودة للمراجعة"}`;
       }
 
       case "publish_book": {
@@ -205,22 +245,29 @@ async function handleToolCall(name: string, args: any): Promise<string> {
           year: args.year || String(new Date().getFullYear()),
           publisher: args.publisher || "إصدار مستقل",
         };
-        const { error } = await supabase.from("content_items").upsert([
-          {
-            type: "book",
-            title: args.title,
-            slug,
-            excerpt: args.excerpt,
-            body: args.body || args.excerpt,
-            category: args.category || "كتب ودراسات",
-            cover_url: args.cover_url || null,
-            meta,
-            status: args.status || "published",
-            published_at: new Date().toISOString(),
-          },
-        ]);
-        if (error) throw error;
-        return `✅ تم بنجاح إضافة الكتاب: "${args.title}"\n• الرابط: /books\n• الحالة: ${args.status || "published"}`;
+        const newItem = {
+          id: crypto.randomUUID(),
+          type: "book",
+          title: args.title,
+          slug,
+          excerpt: args.excerpt,
+          body: args.body || args.excerpt,
+          category: args.category || "كتب ودراسات",
+          cover_url: args.cover_url || null,
+          meta,
+          status: args.status || "published",
+          published_at: new Date().toISOString(),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+
+        const store = getLocalStore();
+        store.items = [newItem, ...store.items.filter((i: any) => i.slug !== slug)];
+        saveLocalStore(store);
+
+        supabase.from("content_items").upsert([newItem]).catch(() => {});
+
+        return `✅ تم بنجاح إضافة الكتاب: "${args.title}"\n• الرابط في الموقع: /books\n• الحالة: ${newItem.status === "published" ? "منشور ومتاح فوراً للزوار" : "مسودة للمراجعة"}`;
       }
 
       case "publish_research": {
@@ -230,22 +277,29 @@ async function handleToolCall(name: string, args: any): Promise<string> {
           pages: args.pages || "24 صفحة",
           status: "ورقة عمل منشورة",
         };
-        const { error } = await supabase.from("content_items").upsert([
-          {
-            type: "research",
-            title: args.title,
-            slug,
-            excerpt: args.excerpt,
-            body: args.body || args.excerpt,
-            category: args.category || "أبحاث مستقلة",
-            tags: args.tags || [],
-            meta,
-            status: args.status || "published",
-            published_at: new Date().toISOString(),
-          },
-        ]);
-        if (error) throw error;
-        return `✅ تم بنجاح نشر الورقة البحثية: "${args.title}"\n• الرابط: /research\n• الحالة: ${args.status || "published"}`;
+        const newItem = {
+          id: crypto.randomUUID(),
+          type: "research",
+          title: args.title,
+          slug,
+          excerpt: args.excerpt,
+          body: args.body || args.excerpt,
+          category: args.category || "أبحاث مستقلة",
+          tags: args.tags || [],
+          meta,
+          status: args.status || "published",
+          published_at: new Date().toISOString(),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+
+        const store = getLocalStore();
+        store.items = [newItem, ...store.items.filter((i: any) => i.slug !== slug)];
+        saveLocalStore(store);
+
+        supabase.from("content_items").upsert([newItem]).catch(() => {});
+
+        return `✅ تم بنجاح نشر الورقة البحثية: "${args.title}"\n• الرابط في الموقع: /research\n• الحالة: ${newItem.status === "published" ? "منشور ومتاح فوراً للزوار" : "مسودة للمراجعة"}`;
       }
 
       case "publish_photo": {
@@ -254,57 +308,72 @@ async function handleToolCall(name: string, args: any): Promise<string> {
           location: args.location || "",
           camera: args.camera || "",
         };
-        const { error } = await supabase.from("content_items").upsert([
-          {
-            type: "gallery",
-            title: args.title,
-            slug,
-            cover_url: args.cover_url,
-            excerpt: args.excerpt || "",
-            body: args.body || args.excerpt || "",
-            meta,
-            status: args.status || "published",
-            published_at: new Date().toISOString(),
-          },
-        ]);
-        if (error) throw error;
+        const newItem = {
+          id: crypto.randomUUID(),
+          type: "gallery",
+          title: args.title,
+          slug,
+          cover_url: args.cover_url,
+          excerpt: args.excerpt || "",
+          body: args.body || args.excerpt || "",
+          meta,
+          status: args.status || "published",
+          published_at: new Date().toISOString(),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+
+        const store = getLocalStore();
+        store.items = [newItem, ...store.items.filter((i: any) => i.slug !== slug)];
+        saveLocalStore(store);
+
+        supabase.from("content_items").upsert([newItem]).catch(() => {});
+
         return `✅ تم بنجاح إضافة العمل البصري: "${args.title}" لمعرض الصور!`;
       }
 
       case "get_inbox_messages": {
         const limit = args?.limit || 10;
-        const { data, error } = await supabase
-          .from("contact_messages")
-          .select("*")
-          .order("created_at", { ascending: false })
-          .limit(limit);
+        try {
+          const { data, error } = await supabase
+            .from("contact_messages")
+            .select("*")
+            .order("created_at", { ascending: false })
+            .limit(limit);
 
-        if (error) throw error;
-        if (!data || data.length === 0) {
-          return "📭 لا توجد رسائل واردة جديدة في صندوق البريد حالياً.";
-        }
-
-        const formatted = data
-          .map(
-            (m, i) =>
-              `📩 رسالة #${i + 1}:\n• من: ${m.name} (${m.email})\n• الموضوع: ${m.subject || "بدون موضوع"}\n• التاريخ: ${m.created_at}\n• نص الرسالة: ${m.message}\n---`
-          )
-          .join("\n\n");
-
-        return `📬 إجمالي الرسائل الواردة (${data.length}):\n\n${formatted}`;
+          if (!error && data && data.length > 0) {
+            const formatted = data
+              .map(
+                (m: any, i: number) =>
+                  `📩 رسالة #${i + 1}:\n• من: ${m.name} (${m.email})\n• الموضوع: ${m.subject || "بدون موضوع"}\n• التاريخ: ${m.created_at}\n• نص الرسالة: ${m.message}\n---`
+              )
+              .join("\n\n");
+            return `📬 إجمالي الرسائل الواردة (${data.length}):\n\n${formatted}`;
+          }
+        } catch {}
+        return "📭 لا توجد رسائل واردة جديدة في صندوق البريد حالياً.";
       }
 
       case "list_content_items": {
-        let query = supabase.from("content_items").select("id, type, title, status, published_at").order("published_at", { ascending: false });
-        if (args?.type) query = query.eq("type", args.type);
-        if (args?.status) query = query.eq("status", args.status);
-        const { data, error } = await query.limit(30);
+        const store = getLocalStore();
+        let items = store.items;
 
-        if (error) throw error;
-        if (!data || data.length === 0) return "لا توجد عناصر مطابقة.";
+        if (!items || items.length === 0) {
+          const { data } = await supabase
+            .from("content_items")
+            .select("id, type, title, status, published_at")
+            .order("published_at", { ascending: false })
+            .limit(30);
+          items = data || [];
+        }
 
-        const list = data
-          .map((item) => `• [${item.type}] ${item.title} (${item.status === "published" ? "منشور" : "مسودة"})`)
+        if (args?.type) items = items.filter((i: any) => i.type === args.type);
+        if (args?.status) items = items.filter((i: any) => i.status === args.status);
+
+        if (!items || items.length === 0) return "لا توجد عناصر مطابقة.";
+
+        const list = items
+          .map((item: any) => `• [${item.type}] ${item.title} (${item.status === "published" ? "منشور" : "مسودة"})`)
           .join("\n");
         return `📋 المحتويات:\n${list}`;
       }

@@ -149,14 +149,25 @@ function KhiderAdminPage() {
       ]);
 
       if (itemsRes.data && itemsRes.data.length > 0) {
-        // Merge remote items with local items if remote has data
+        // Smart non-destructive merge: never overwrite user's local edits!
         const local = getStoredItems();
-        if (local.length <= 6) {
+        if (local.length === 0) {
           setItems(itemsRes.data as ContentItem[]);
           saveStoredItems(itemsRes.data as ContentItem[]);
+        } else {
+          // Merge only new remote items that don't exist locally
+          const localIds = new Set(local.map((i) => i.id));
+          const newRemote = (itemsRes.data as ContentItem[]).filter((i) => !localIds.has(i.id));
+          if (newRemote.length > 0) {
+            const merged = [...local, ...newRemote];
+            setItems(merged);
+            saveStoredItems(merged);
+          }
         }
       }
-      if (settingsRes.data?.data) {
+      // Only apply remote settings if local settings haven't been customized by the user
+      const isCustomized = typeof window !== "undefined" && localStorage.getItem("khiders_settings_customized") === "true";
+      if (!isCustomized && settingsRes.data?.data) {
         setSettings((prev) => ({ ...prev, ...(settingsRes.data.data as any) }));
       }
       if (msgsRes.data) {
@@ -350,6 +361,9 @@ function KhiderAdminPage() {
 
     setItems(updated);
     saveStoredItems(updated);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("khiders_content_customized", "true");
+    }
     setItemDialogOpen(false);
     toast.success("✅ تم حفظ وتحديث المحتوى في الموقع بنجاح!");
 
@@ -388,6 +402,9 @@ function KhiderAdminPage() {
 
   function saveSettings(e: React.FormEvent) {
     e.preventDefault();
+    if (typeof window !== "undefined") {
+      localStorage.setItem("khiders_settings_customized", "true");
+    }
     saveStoredSettings(settings);
     toast.success("✅ تم حفظ وتطبيق إعدادات الموقع فورياً في كافة الصفحات!");
 

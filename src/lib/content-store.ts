@@ -140,6 +140,22 @@ export function useLiveContent(fallbackItems?: ContentItem[]): ContentItem[] {
     if (typeof window === "undefined") return;
     setItems(getStoredItems());
 
+    // If local storage is not yet initialized, hydrate from public/content.json
+    try {
+      const raw = localStorage.getItem(ITEMS_STORAGE_KEY);
+      if (!raw) {
+        fetch("/content.json")
+          .then((r) => r.json())
+          .then((data) => {
+            if (Array.isArray(data?.items) && data.items.length > 0) {
+              saveStoredItems(data.items);
+              setItems(data.items);
+            }
+          })
+          .catch(() => {});
+      }
+    } catch {}
+
     function onContentChanged(e: any) {
       if (e.detail) setItems(e.detail);
     }
@@ -164,6 +180,22 @@ export function useLiveSettings(fallbackSettings?: SiteSettings): SiteSettings {
   useEffect(() => {
     if (typeof window === "undefined") return;
     setSettings(getStoredSettings());
+
+    // If settings are not yet initialized, hydrate from public/content.json
+    try {
+      const raw = localStorage.getItem(SETTINGS_STORAGE_KEY);
+      if (!raw) {
+        fetch("/content.json")
+          .then((r) => r.json())
+          .then((data) => {
+            if (data?.settings && typeof data.settings === "object") {
+              saveStoredSettings(data.settings);
+              setSettings(data.settings);
+            }
+          })
+          .catch(() => {});
+      }
+    } catch {}
 
     function onSettingsChanged(e: any) {
       if (e.detail) setSettings(e.detail);

@@ -154,7 +154,7 @@ function RootComponent() {
         // Public website layout
         <div className="min-h-screen flex flex-col">
           <Navbar />
-          <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 pt-6 sm:pt-8 pb-16">
+          <main key={pathname} className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 pt-6 sm:pt-8 pb-16 page-enter">
             <Outlet />
           </main>
           <Footer />
