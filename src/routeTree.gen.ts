@@ -10,7 +10,15 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as BooksRouteImport } from './routes/books'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as KhiderRouteImport } from './routes/khider'
+import { Route as ProjectsRouteImport } from './routes/projects'
+import { Route as ResearchRouteImport } from './routes/research'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as WritingRouteImport } from './routes/writing'
 import { Route as ApiPublicMediaSplatRouteImport } from './routes/api/public/media.$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -18,9 +26,49 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BooksRoute = BooksRouteImport.update({
+  id: '/books',
+  path: '/books',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KhiderRoute = KhiderRouteImport.update({
+  id: '/khider',
+  path: '/khider',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsRoute = ProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResearchRoute = ResearchRouteImport.update({
+  id: '/research',
+  path: '/research',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WritingRoute = WritingRouteImport.update({
+  id: '/writing',
+  path: '/writing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicMediaSplatRoute = ApiPublicMediaSplatRouteImport.update({
@@ -31,31 +79,97 @@ const ApiPublicMediaSplatRoute = ApiPublicMediaSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/books': typeof BooksRoute
+  '/contact': typeof ContactRoute
+  '/gallery': typeof GalleryRoute
+  '/khider': typeof KhiderRoute
+  '/projects': typeof ProjectsRoute
+  '/research': typeof ResearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/writing': typeof WritingRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/books': typeof BooksRoute
+  '/contact': typeof ContactRoute
+  '/gallery': typeof GalleryRoute
+  '/khider': typeof KhiderRoute
+  '/projects': typeof ProjectsRoute
+  '/research': typeof ResearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/writing': typeof WritingRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/books': typeof BooksRoute
+  '/contact': typeof ContactRoute
+  '/gallery': typeof GalleryRoute
+  '/khider': typeof KhiderRoute
+  '/projects': typeof ProjectsRoute
+  '/research': typeof ResearchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/writing': typeof WritingRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sitemap.xml' | '/api/public/media/$'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/books'
+    | '/contact'
+    | '/gallery'
+    | '/khider'
+    | '/projects'
+    | '/research'
+    | '/sitemap.xml'
+    | '/writing'
+    | '/api/public/media/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sitemap.xml' | '/api/public/media/$'
-  id: '__root__' | '/' | '/sitemap.xml' | '/api/public/media/$'
+  to:
+    | '/'
+    | '/about'
+    | '/books'
+    | '/contact'
+    | '/gallery'
+    | '/khider'
+    | '/projects'
+    | '/research'
+    | '/sitemap.xml'
+    | '/writing'
+    | '/api/public/media/$'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/books'
+    | '/contact'
+    | '/gallery'
+    | '/khider'
+    | '/projects'
+    | '/research'
+    | '/sitemap.xml'
+    | '/writing'
+    | '/api/public/media/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  BooksRoute: typeof BooksRoute
+  ContactRoute: typeof ContactRoute
+  GalleryRoute: typeof GalleryRoute
+  KhiderRoute: typeof KhiderRoute
+  ProjectsRoute: typeof ProjectsRoute
+  ResearchRoute: typeof ResearchRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  WritingRoute: typeof WritingRoute
   ApiPublicMediaSplatRoute: typeof ApiPublicMediaSplatRoute
 }
 
@@ -68,11 +182,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/books': {
+      id: '/books'
+      path: '/books'
+      fullPath: '/books'
+      preLoaderRoute: typeof BooksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/khider': {
+      id: '/khider'
+      path: '/khider'
+      fullPath: '/khider'
+      preLoaderRoute: typeof KhiderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects': {
+      id: '/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof ProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/research': {
+      id: '/research'
+      path: '/research'
+      fullPath: '/research'
+      preLoaderRoute: typeof ResearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/writing': {
+      id: '/writing'
+      path: '/writing'
+      fullPath: '/writing'
+      preLoaderRoute: typeof WritingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/media/$': {
@@ -87,7 +257,15 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  BooksRoute: BooksRoute,
+  ContactRoute: ContactRoute,
+  GalleryRoute: GalleryRoute,
+  KhiderRoute: KhiderRoute,
+  ProjectsRoute: ProjectsRoute,
+  ResearchRoute: ResearchRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  WritingRoute: WritingRoute,
   ApiPublicMediaSplatRoute: ApiPublicMediaSplatRoute,
 }
 export const routeTree = rootRouteImport

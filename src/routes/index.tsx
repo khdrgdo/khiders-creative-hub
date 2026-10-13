@@ -1,24 +1,67 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { siteQuery, homeContentQuery } from "@/lib/queries";
+import { mergeSettings, filterByType } from "@/lib/content-helper";
+import { HeroSection } from "@/components/public/HeroSection";
+import { BooksSection } from "@/components/public/BooksSection";
+import { ProjectsSection } from "@/components/public/ProjectsSection";
+import { WritingSection } from "@/components/public/WritingSection";
+import { ResearchSection } from "@/components/public/ResearchSection";
+import { GallerySection } from "@/components/public/GallerySection";
+import { ContactSection } from "@/components/public/ContactSection";
+import type { ContentItem } from "@/lib/site-types";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  component: IndexPage,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function IndexPage() {
+  const { data: siteData } = useQuery(siteQuery);
+  const { data: homeItems } = useQuery(homeContentQuery);
+
+  const settings = mergeSettings(siteData?.settings);
+  const items = (homeItems as ContentItem[]) || [];
+
+  const books = filterByType(items, "book");
+  const projects = filterByType(items, "project");
+  const articles = filterByType(items, "article");
+  const research = filterByType(items, "research");
+  const gallery = filterByType(items, "gallery");
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="space-y-16 sm:space-y-24">
+      {/* 1. Hero */}
+      <HeroSection settings={settings} />
+
+      <div className="rule-ornament" />
+
+      {/* 2. Featured Books */}
+      <BooksSection books={books} limit={2} />
+
+      <div className="rule-ornament" />
+
+      {/* 3. Selected Software Projects */}
+      <ProjectsSection projects={projects} limit={2} />
+
+      <div className="rule-ornament" />
+
+      {/* 4. Latest Articles */}
+      <WritingSection articles={articles} limit={3} />
+
+      <div className="rule-ornament" />
+
+      {/* 5. Independent Research */}
+      <ResearchSection research={research} limit={2} />
+
+      <div className="rule-ornament" />
+
+      {/* 6. Photography / Visual Gallery */}
+      <GallerySection items={gallery} limit={3} />
+
+      <div className="rule-ornament" />
+
+      {/* 7. Direct Contact */}
+      <ContactSection email={settings.email} />
     </div>
   );
 }
