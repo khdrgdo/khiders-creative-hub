@@ -168,7 +168,7 @@ function KhiderAdminPage() {
       // Only apply remote settings if local settings haven't been customized by the user
       const isCustomized = typeof window !== "undefined" && localStorage.getItem("khiders_settings_customized") === "true";
       if (!isCustomized && settingsRes.data?.data) {
-        setSettings((prev) => ({ ...prev, ...(settingsRes.data.data as any) }));
+        setSettings((prev) => ({ ...prev, ...(settingsRes.data!.data as any) }));
       }
       if (msgsRes.data) {
         setMessages(msgsRes.data);
@@ -227,7 +227,7 @@ function KhiderAdminPage() {
     if (typeof window !== "undefined") {
       sessionStorage.removeItem("khider_admin_authorized");
     }
-    supabase.auth.signOut().catch(() => {});
+    supabase.auth.signOut().then(() => {}, () => {});
     setIsAuthenticated(false);
     toast.success("تم تسجيل الخروج بنجاح.");
   }
@@ -270,13 +270,13 @@ function KhiderAdminPage() {
     const meta = (item.meta || {}) as Record<string, any>;
     const links = (item.links || []) as Array<{ label: string; url: string }>;
 
-    setMetaYear(meta.year || "");
-    setMetaPages(meta.pages || "");
-    setMetaPublisher(meta.publisher || "");
-    setMetaReadTime(meta.readTime || "");
-    setMetaCamera(meta.camera || "");
-    setMetaLocation(meta.location || "");
-    setMetaLicense(meta.license || "MIT");
+    setMetaYear(meta["year"] || "");
+    setMetaPages(meta["pages"] || "");
+    setMetaPublisher(meta["publisher"] || "");
+    setMetaReadTime(meta["readTime"] || "");
+    setMetaCamera(meta["camera"] || "");
+    setMetaLocation(meta["location"] || "");
+    setMetaLicense(meta["license"] || "MIT");
 
     const ghLink = links.find((l) => l.label?.toLowerCase() === "github");
     const demoLink = links.find((l) => l.label?.includes("معاينة") || l.label?.toLowerCase() === "demo");
@@ -308,19 +308,19 @@ function KhiderAdminPage() {
     // Build meta object based on type
     const meta: Record<string, any> = { ...(editingItem.meta || {}) };
     if (editingItem.type === "book") {
-      if (metaYear) meta.year = metaYear;
-      if (metaPages) meta.pages = metaPages;
-      if (metaPublisher) meta.publisher = metaPublisher;
+      if (metaYear) meta["year"] = metaYear;
+      if (metaPages) meta["pages"] = metaPages;
+      if (metaPublisher) meta["publisher"] = metaPublisher;
     } else if (editingItem.type === "project") {
-      if (metaLicense) meta.license = metaLicense;
+      if (metaLicense) meta["license"] = metaLicense;
     } else if (editingItem.type === "article") {
-      if (metaReadTime) meta.readTime = metaReadTime;
+      if (metaReadTime) meta["readTime"] = metaReadTime;
     } else if (editingItem.type === "research") {
-      if (metaYear) meta.year = metaYear;
-      if (metaPages) meta.pages = metaPages;
+      if (metaYear) meta["year"] = metaYear;
+      if (metaPages) meta["pages"] = metaPages;
     } else if (editingItem.type === "gallery") {
-      if (metaCamera) meta.camera = metaCamera;
-      if (metaLocation) meta.location = metaLocation;
+      if (metaCamera) meta["camera"] = metaCamera;
+      if (metaLocation) meta["location"] = metaLocation;
     }
 
     // Build links array
@@ -383,19 +383,19 @@ function KhiderAdminPage() {
     saveStoredItems(updated);
     toast.success("تم حذف المحتوى بنجاح.");
 
-    supabase.from("content_items").delete().eq("id", id).catch(() => {});
+    supabase.from("content_items").delete().eq("id", id).then(() => {}, () => {});
   }
 
   function toggleStatus(item: ContentItem) {
     const newStatus = item.status === "published" ? "draft" : "published";
-    const updatedItem = { ...item, status: newStatus };
+    const updatedItem: ContentItem = { ...item, status: newStatus as ContentItem["status"] };
     const updated = items.map((i) => (i.id === item.id ? updatedItem : i));
 
     setItems(updated);
     saveStoredItems(updated);
     toast.success(`تم تغيير الحالة إلى: ${newStatus === "published" ? "منشور ومتاح للزوار" : "مسودة خاصة"}`);
 
-    supabase.from("content_items").update({ status: newStatus }).eq("id", item.id).catch(() => {});
+    supabase.from("content_items").update({ status: newStatus }).eq("id", item.id).then(() => {}, () => {});
   }
 
   // --- Site Settings Operations ---
@@ -408,7 +408,7 @@ function KhiderAdminPage() {
     saveStoredSettings(settings);
     toast.success("✅ تم حفظ وتطبيق إعدادات الموقع فورياً في كافة الصفحات!");
 
-    supabase.from("site_settings").upsert([{ id: 1, data: settings as any }]).catch(() => {});
+    supabase.from("site_settings").upsert([{ id: 1, data: settings as any }]).then(() => {}, () => {});
   }
 
   // --- Backup / Export / Import ---
@@ -925,8 +925,8 @@ function KhiderAdminPage() {
                 <div className="space-y-1.5">
                   <Label className="text-xs font-semibold">نوع المحتوى</Label>
                   <Select
-                    value={editingItem.type}
-                    onValueChange={(val: ContentType) => setEditingItem({ ...editingItem, type: val })}
+                    value={editingItem.type ?? ""}
+                    onValueChange={(val: string) => setEditingItem({ ...editingItem, type: val as ContentType })}
                   >
                     <SelectTrigger className="h-9 text-xs">
                       <SelectValue placeholder="اختر النوع" />

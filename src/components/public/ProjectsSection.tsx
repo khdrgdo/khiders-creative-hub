@@ -68,9 +68,9 @@ export function ProjectsSection({ projects, showHeading = true, limit }: Project
                     <span className="px-2.5 py-0.5 rounded-full bg-accent text-accent-foreground font-medium text-[11px]">
                       {project.category || "برمجيات مفتوحة"}
                     </span>
-                    {meta.license && (
+                    {meta["license"] && (
                       <span className="font-mono text-[11px] text-muted-foreground">
-                        {meta.license}
+                        {meta["license"]}
                       </span>
                     )}
                   </div>
@@ -130,7 +130,7 @@ export function ProjectsSection({ projects, showHeading = true, limit }: Project
 
                 <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
                   <Cpu className="w-3 h-3 text-primary" />
-                  <span>{meta.status || "نشط"}</span>
+                  <span>{meta["status"] || "نشط"}</span>
                 </div>
               </div>
             </article>

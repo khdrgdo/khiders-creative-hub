@@ -72,12 +72,12 @@ export function WritingSection({ articles, showHeading = true, limit }: WritingS
                 <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
                   <span className="font-mono text-primary font-bold">{articleNum}</span>
                   <span className="font-sans">{formatDate(article.published_at)}</span>
-                  {meta.readTime && (
+                  {meta["readTime"] && (
                     <>
                       <span>•</span>
                       <span className="flex items-center gap-1">
                         <Clock className="w-3.5 h-3.5 text-primary" />
-                        {meta.readTime}
+                        {meta["readTime"]}
                       </span>
                     </>
                   )}

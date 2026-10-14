@@ -129,12 +129,7 @@ export function importDataFromJson(jsonString: string): { items: ContentItem[]; 
  * Reactive React hook for components to always render latest content items
  */
 export function useLiveContent(fallbackItems?: ContentItem[]): ContentItem[] {
-  const [items, setItems] = useState<ContentItem[]>(() => {
-    if (typeof window !== "undefined") {
-      return getStoredItems();
-    }
-    return fallbackItems || defaultContentItems;
-  });
+  const [items, setItems] = useState<ContentItem[]>(() => fallbackItems || defaultContentItems);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -170,12 +165,7 @@ export function useLiveContent(fallbackItems?: ContentItem[]): ContentItem[] {
  * Reactive React hook for components to always render latest site settings
  */
 export function useLiveSettings(fallbackSettings?: SiteSettings): SiteSettings {
-  const [settings, setSettings] = useState<SiteSettings>(() => {
-    if (typeof window !== "undefined") {
-      return getStoredSettings();
-    }
-    return fallbackSettings || initialSiteSettings;
-  });
+  const [settings, setSettings] = useState<SiteSettings>(() => fallbackSettings || initialSiteSettings);
 
   useEffect(() => {
     if (typeof window === "undefined") return;

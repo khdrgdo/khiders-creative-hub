@@ -130,9 +130,9 @@ export function GallerySection({ items, showHeading = true, limit }: GallerySect
                       <Maximize2 className="w-3.5 h-3.5 text-primary" />
                       <span>عرض في صالة المعرض</span>
                     </span>
-                    {meta.camera && (
+                    {meta["camera"] && (
                       <span className="text-[10px] text-white/80 font-mono hidden sm:inline">
-                        {meta.camera}
+                        {meta["camera"]}
                       </span>
                     )}
                   </div>
@@ -145,10 +145,10 @@ export function GallerySection({ items, showHeading = true, limit }: GallerySect
                   <h3 className="font-display text-lg sm:text-xl font-bold text-foreground group-hover:text-primary transition-colors leading-snug">
                     {photo.title}
                   </h3>
-                  {meta.location && (
+                  {meta["location"] && (
                     <span className="flex items-center gap-1 text-[11px] font-sans text-muted-foreground shrink-0 bg-muted/60 px-2 py-0.5 rounded-md">
                       <MapPin className="w-3 h-3 text-primary" />
-                      <span>{meta.location}</span>
+                      <span>{meta["location"]}</span>
                     </span>
                   )}
                 </div>
@@ -162,10 +162,10 @@ export function GallerySection({ items, showHeading = true, limit }: GallerySect
                 {/* Plaque Footer Metadata */}
                 <div className="pt-2 border-t border-border/40 flex items-center justify-between text-[11px] font-mono text-muted-foreground">
                   <span className="flex items-center gap-1.5">
-                    {meta.camera ? (
+                    {meta["camera"] ? (
                       <>
                         <Aperture className="w-3 h-3 text-primary/80" />
-                        <span>{meta.camera}</span>
+                        <span>{meta["camera"]}</span>
                       </>
                     ) : (
                       <span>{photo.category || "عمل فوتوغرافي"}</span>
