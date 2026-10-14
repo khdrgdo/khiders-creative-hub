@@ -8,3 +8,4 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+- MCP server lives in src/lib/mcp (OAuth, tools act as signed-in user under RLS); never use anon-key write scripts. Why: old external worker bypassed auth and failed under RLS.

@@ -89,14 +89,14 @@ export function BooksSection({ books, showHeading = true, limit }: BooksSectionP
                       <span className="px-2.5 py-0.5 rounded-full bg-accent text-accent-foreground font-medium text-[11px]">
                         {book.category || "إصدار كتاب"}
                       </span>
-                      {meta.year && (
-                        <span className="text-muted-foreground">{meta.year}</span>
+                      {meta["year"] && (
+                        <span className="text-muted-foreground">{meta["year"]}</span>
                       )}
-                      {meta.pages && (
-                        <span className="text-muted-foreground">• {meta.pages}</span>
+                      {meta["pages"] && (
+                        <span className="text-muted-foreground">• {meta["pages"]}</span>
                       )}
-                      {meta.publisher && (
-                        <span className="text-muted-foreground">• {meta.publisher}</span>
+                      {meta["publisher"] && (
+                        <span className="text-muted-foreground">• {meta["publisher"]}</span>
                       )}
                     </div>
 

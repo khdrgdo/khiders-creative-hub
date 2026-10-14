@@ -64,13 +64,13 @@ export function ResearchSection({ research, showHeading = true, limit }: Researc
                   <span className="font-sans font-medium text-foreground">
                     {item.category || "ورقة بحثية"}
                   </span>
-                  {meta.status && (
-                    <span className="text-muted-foreground">• {meta.status}</span>
+                  {meta["status"] && (
+                    <span className="text-muted-foreground">• {meta["status"]}</span>
                   )}
                 </div>
 
-                {meta.year && (
-                  <span className="font-mono text-xs text-muted-foreground">{meta.year}</span>
+                {meta["year"] && (
+                  <span className="font-mono text-xs text-muted-foreground">{meta["year"]}</span>
                 )}
               </div>
 
@@ -122,9 +122,9 @@ export function ResearchSection({ research, showHeading = true, limit }: Researc
                   </Button>
                 </div>
 
-                {meta.pages && (
+                {meta["pages"] && (
                   <span className="text-xs font-mono text-muted-foreground">
-                    {meta.pages}
+                    {meta["pages"]}
                   </span>
                 )}
               </div>
