@@ -1,0 +1,232 @@
+{
+  "version": 1,
+  "sdk_version": "3.0.5",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://zpdornzxupokchgkaoqs.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "khidr",
+      "version": "0.1.0",
+      "title": "Khidr"
+    },
+    "tools": [
+      {
+        "name": "list_content",
+        "title": "List site content",
+        "description": "List books, projects, articles, research or gallery items on the site, optionally filtered by type and status.",
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "type": {
+              "description": "Content type filter.",
+              "type": "string",
+              "enum": [
+                "book",
+                "project",
+                "article",
+                "research",
+                "gallery"
+              ]
+            },
+            "status": {
+              "description": "Status filter.",
+              "type": "string",
+              "enum": [
+                "published",
+                "draft"
+              ]
+            },
+            "limit": {
+              "description": "Max items (default 30).",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_content",
+        "title": "Create site content",
+        "description": "Add a book, project, article, research paper or gallery photo to the site (admin only). Saved as draft unless status is 'published'.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "book",
+                "project",
+                "article",
+                "research",
+                "gallery"
+              ],
+              "description": "Content type."
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300,
+              "description": "Title."
+            },
+            "excerpt": {
+              "description": "Short summary.",
+              "type": "string",
+              "maxLength": 1000
+            },
+            "body": {
+              "description": "Full text (Markdown).",
+              "type": "string",
+              "maxLength": 100000
+            },
+            "category": {
+              "description": "Category.",
+              "type": "string",
+              "maxLength": 100
+            },
+            "tags": {
+              "description": "Tags.",
+              "maxItems": 30,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 50
+              }
+            },
+            "cover_url": {
+              "description": "Cover or photo image URL.",
+              "type": "string",
+              "format": "uri"
+            },
+            "links": {
+              "description": "Links such as GitHub or demo.",
+              "maxItems": 10,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "maxLength": 60
+                  },
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                },
+                "required": [
+                  "label",
+                  "url"
+                ]
+              }
+            },
+            "meta": {
+              "description": "Extra details, e.g. year, pages, publisher, readTime, license, camera, location.",
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {
+                "type": "string",
+                "maxLength": 200
+              }
+            },
+            "status": {
+              "description": "Publish now or keep as draft (default draft).",
+              "type": "string",
+              "enum": [
+                "published",
+                "draft"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "title"
+          ],
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "set_content_status",
+        "title": "Publish or unpublish content",
+        "description": "Change a content item's status to published or draft (admin only).",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "description": "Content item id from list_content."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "published",
+                "draft"
+              ],
+              "description": "New status."
+            }
+          },
+          "required": [
+            "id",
+            "status"
+          ],
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_messages",
+        "title": "Read contact messages",
+        "description": "Read the latest messages visitors sent through the contact form (admin only).",
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "description": "How many messages (default 10).",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
