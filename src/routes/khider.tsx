@@ -306,7 +306,7 @@ function KhiderAdminPage() {
       .filter(Boolean);
 
     // Build meta object based on type
-    const meta: Record<string, any> = { ...(editingItem.meta || {}) };
+    const meta: Record<string, any> = { ...((editingItem.meta as Record<string, any>) || {}) };
     if (editingItem.type === "book") {
       if (metaYear) meta["year"] = metaYear;
       if (metaPages) meta["pages"] = metaPages;
