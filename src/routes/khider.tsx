@@ -44,6 +44,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
+import { oauthReturnPath } from "@/lib/oauth-return-path";
 import type { ContentItem, ContentType, SiteSettings } from "@/lib/site-types";
 import { slugify, typeConfig } from "@/lib/site-types";
 import {
@@ -106,12 +107,6 @@ function KhiderAdminPage() {
     setSettings(getStoredSettings());
 
     // 2. Check auth
-    if (typeof window !== "undefined" && sessionStorage.getItem("khider_admin_authorized") === "true") {
-      setIsAuthenticated(true);
-      setCheckingAuth(false);
-      loadRemoteData();
-      return;
-    }
 
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) {
@@ -185,20 +180,6 @@ function KhiderAdminPage() {
     const inputPassword = password.trim();
 
     try {
-      // 1. Authorized administrator credentials check
-      if (
-        (inputEmail === "khdrmamon@gmail.com" && inputPassword === "khdrmamon") ||
-        (inputEmail === "khdrmamon@gmail.com" && inputPassword === "Khider@Mamoun2026!")
-      ) {
-        if (typeof window !== "undefined") {
-          sessionStorage.setItem("khider_admin_authorized", "true");
-        }
-        setIsAuthenticated(true);
-        toast.success("مرحباً بك يا أستاذ خضر! تم الدخول إلى لوحة التحكم بنجاح.");
-        await loadRemoteData();
-        return;
-      }
-
       // 2. Try Supabase Auth
       const { data, error } = await supabase.auth.signInWithPassword({
         email: inputEmail,
@@ -208,6 +189,11 @@ function KhiderAdminPage() {
       if (!error && data?.session) {
         if (typeof window !== "undefined") {
           sessionStorage.setItem("khider_admin_authorized", "true");
+        }
+        const next = oauthReturnPath(new URLSearchParams(window.location.search).get("next"));
+        if (next !== "/") {
+          window.location.href = next;
+          return;
         }
         setIsAuthenticated(true);
         toast.success("مرحباً بك يا خضر! تم الدخول بنجاح.");
