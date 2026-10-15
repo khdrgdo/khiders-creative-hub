@@ -8,6 +8,13 @@
       "when": 1791876808194,
       "tag": "0000_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792054242164,
+      "tag": "0001_mcp_admin_tools",
+      "breakpoints": true
     }
   ]
 }

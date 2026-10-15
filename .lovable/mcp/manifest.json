@@ -12,14 +12,14 @@
   "mcp": {
     "server": {
       "name": "khidr",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "title": "Khidr"
     },
     "tools": [
       {
         "name": "list_content",
         "title": "List site content",
-        "description": "List books, projects, articles, research or gallery items on the site, optionally filtered by type and status.",
+        "description": "List content items (admin only), filtered by type and status (published, draft or trash), optionally with all fields.",
         "annotations": {
           "readOnlyHint": true,
           "openWorldHint": false
@@ -40,12 +40,18 @@
               ]
             },
             "status": {
-              "description": "Status filter.",
+              "description": "Status filter (default: all non-deleted).",
               "type": "string",
               "enum": [
                 "published",
-                "draft"
+                "draft",
+                "trash",
+                "all"
               ]
+            },
+            "full": {
+              "description": "Return every field (body, tags, links, meta).",
+              "type": "boolean"
             },
             "limit": {
               "description": "Max items (default 30).",
@@ -54,6 +60,32 @@
               "maximum": 100
             }
           },
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_content",
+        "title": "Get content item",
+        "description": "Return every field of one content item, including body, tags, links and meta (admin only).",
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "description": "Content item id."
+            }
+          },
+          "required": [
+            "id"
+          ],
           "additionalProperties": false
         },
         "outputSchema": null
@@ -168,6 +200,140 @@
         "outputSchema": null
       },
       {
+        "name": "update_content",
+        "title": "Update content item",
+        "description": "Edit fields of an existing content item in place (admin only). Only the fields you pass are changed.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "description": "Content item id."
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "book",
+                "project",
+                "article",
+                "research",
+                "gallery"
+              ]
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
+            },
+            "slug": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            },
+            "excerpt": {
+              "type": "string",
+              "maxLength": 1000
+            },
+            "body": {
+              "type": "string",
+              "maxLength": 100000
+            },
+            "category": {
+              "type": "string",
+              "maxLength": 100
+            },
+            "tags": {
+              "maxItems": 30,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 50
+              }
+            },
+            "cover_url": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uri"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "images": {
+              "maxItems": 50,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uri"
+              }
+            },
+            "links": {
+              "maxItems": 10,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "maxLength": 60
+                  },
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                },
+                "required": [
+                  "label",
+                  "url"
+                ]
+              }
+            },
+            "meta": {
+              "description": "Replaces meta entirely.",
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {
+                "type": "string",
+                "maxLength": 200
+              }
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "published",
+                "draft"
+              ]
+            },
+            "featured": {
+              "type": "boolean"
+            },
+            "sort_order": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      },
+      {
         "name": "set_content_status",
         "title": "Publish or unpublish content",
         "description": "Change a content item's status to published or draft (admin only).",
@@ -200,6 +366,78 @@
             "id",
             "status"
           ],
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "delete_content",
+        "title": "Move content to trash",
+        "description": "Soft-delete a content item: it moves to the trash and disappears from the site, but can be restored with restore_content (admin only).",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "description": "Content item id."
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "restore_content",
+        "title": "Restore content from trash",
+        "description": "Restore a soft-deleted content item from the trash (admin only).",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "description": "Content item id."
+            }
+          },
+          "required": [
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "check_site_health",
+        "title": "Check site health",
+        "description": "Read-only audit: published items missing title/excerpt/image, broken links, duplicates, pages without basic SEO, and RLS/open policy issues (admin only).",
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {},
           "additionalProperties": false
         },
         "outputSchema": null

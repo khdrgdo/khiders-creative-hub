@@ -1,6 +1,6 @@
 import { defineTool, ToolError } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-import { supabaseForUser } from "../supabase";
+import { requireAdmin } from "../admin";
 
 export default defineTool({
   name: "list_messages",
@@ -11,7 +11,7 @@ export default defineTool({
   },
   annotations: { readOnlyHint: true, openWorldHint: false },
   handler: async ({ limit }, ctx) => {
-    const { data, error } = await supabaseForUser(ctx)
+    const { data, error } = await (await requireAdmin(ctx))
       .from("contact_messages")
       .select("id, name, email, subject, message, is_read, created_at")
       .order("created_at", { ascending: false })
