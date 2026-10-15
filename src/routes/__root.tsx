@@ -129,7 +129,7 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="min-h-screen bg-background text-foreground antialiased selection:bg-lavender">
+      <body className="min-h-screen bg-background text-foreground antialiased selection:bg-accent selection:text-foreground">
         {children}
         <Scripts />
       </body>

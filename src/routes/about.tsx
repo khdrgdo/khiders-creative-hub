@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { siteQuery } from "@/lib/queries";
 import { mergeSettings } from "@/lib/content-helper";
 import { useLiveSettings } from "@/lib/content-store";
-import { CheckCircle2, Compass, BookOpen, Code, Sparkles, Terminal } from "lucide-react";
+import { CheckCircle2, Compass, BookOpen, Code, Terminal } from "lucide-react";
+import { SocialLinksBar } from "@/components/public/SocialLinksBar";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -138,7 +139,7 @@ function AboutPage() {
       </section>
 
       {/* Personal Quote */}
-      <div className="p-8 rounded-2xl bg-accent/40 border border-lavender/40 text-center space-y-3">
+      <div className="p-8 rounded-2xl bg-card border border-border/80 text-center space-y-3 shadow-xs">
         <p className="font-display text-lg sm:text-xl font-bold text-foreground leading-relaxed">
           «البرمجة الحقيقية تشبه الشعر: كلاهما يبحث عن أنقى صياغة ممكنة تُعبّر
           عن المعنى الكامن في أقل عدد من الرموز.»
@@ -146,6 +147,19 @@ function AboutPage() {
         <span className="text-xs font-sans text-muted-foreground block">
           — خضر مأمون
         </span>
+      </div>
+
+      {/* Social & Connect Section */}
+      <div className="pt-6 border-t border-border/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h3 className="font-display text-lg font-bold text-foreground">
+            تواصل وتفاعل
+          </h3>
+          <p className="text-xs font-sans text-muted-foreground">
+            تابع مشروعاتي وحواراتي الفكرية عبر المنصات
+          </p>
+        </div>
+        <SocialLinksBar settings={settings} />
       </div>
     </div>
   );

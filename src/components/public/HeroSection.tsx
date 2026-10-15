@@ -15,6 +15,8 @@ import type { SiteSettings } from "@/lib/site-types";
 import { useLiveContent } from "@/lib/content-store";
 import { filterByType } from "@/lib/content-helper";
 
+import { SocialLinksBar } from "@/components/public/SocialLinksBar";
+
 interface HeroSectionProps {
   settings: SiteSettings;
 }
@@ -27,18 +29,19 @@ export function HeroSection({ settings }: HeroSectionProps) {
 
   return (
     <section className="pt-8 pb-14 sm:pt-14 sm:pb-20 space-y-12">
-      {/* Top Banner / Portfolio Availability */}
-      <div className="flex flex-wrap items-center justify-between gap-4 text-xs font-sans pb-4 border-b border-border/50">
-        <div className="inline-flex items-center gap-2.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-700 border border-emerald-500/20">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="font-medium font-sans">
-            متاح للمشاريع البرمجية والاستشارات الفكرية • Portfolio 2026
+      {/* Top Editorial Index Header (Calm & Understated - No AI green bar) */}
+      <div className="flex flex-wrap items-center justify-between gap-4 text-xs font-mono pb-4 border-b border-border/50 text-muted-foreground">
+        <div className="flex items-center gap-2.5">
+          <span className="text-foreground/90 font-bold uppercase tracking-wider text-[11px]">
+            PORTFOLIO // مِلفُ الأَعْمَال
           </span>
+          <span>•</span>
+          <span className="font-sans text-[11px]">فضاء فكري وبرمجي مستقل</span>
         </div>
 
-        <div className="flex items-center gap-2 text-muted-foreground font-mono text-[11px]">
-          <MapPin className="w-3.5 h-3.5 text-primary/80" />
-          <span>الخرطوم ➔ فضاء المعرفة والبرمجيات الحرة</span>
+        <div className="flex items-center gap-2 text-[11px]">
+          <MapPin className="w-3.5 h-3.5 text-muted-foreground/70" />
+          <span>الخرطوم ➔ الفضاء الرقمي</span>
         </div>
       </div>
 
@@ -48,12 +51,12 @@ export function HeroSection({ settings }: HeroSectionProps) {
         <div className="lg:col-span-7 space-y-6">
           <div className="space-y-3">
             <span className="editorial-num font-mono text-xs uppercase tracking-widest text-primary font-bold">
-              PORTFOLIO // مِلفُ الأَعْمَال
+              PORTFOLIO // خضر مأمون
             </span>
 
             <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-foreground leading-[1.18]">
               أنا{" "}
-              <span className="text-primary underline decoration-lavender/80 underline-offset-8">
+              <span className="text-foreground underline decoration-border/80 underline-offset-8">
                 {settings.siteName || "خضر مأمون"}
               </span>
               .
@@ -65,7 +68,7 @@ export function HeroSection({ settings }: HeroSectionProps) {
           </div>
 
           {/* Manifesto / Mission Excerpt */}
-          <div className="relative ps-5 border-s-2 border-primary/50 my-6">
+          <div className="relative ps-5 border-s-2 border-border my-6">
             <p className="text-base sm:text-lg font-sans text-foreground/80 leading-loose max-w-xl">
               {settings.intro}
             </p>
@@ -75,7 +78,7 @@ export function HeroSection({ settings }: HeroSectionProps) {
           <div className="flex flex-wrap items-center gap-3 pt-2">
             <Button
               asChild
-              className="h-10 px-5 rounded-xl bg-primary text-primary-foreground font-bold text-xs gap-1.5 shadow-sm hover:bg-primary/90 transition-all hover:scale-[1.02]"
+              className="h-10 px-5 rounded-xl bg-primary text-primary-foreground font-bold text-xs gap-1.5 shadow-sm hover:bg-primary/90 transition-all hover:scale-[1.01]"
             >
               <Link to="/projects">
                 <span>استكشاف المشاريع البرمجية</span>
@@ -86,7 +89,7 @@ export function HeroSection({ settings }: HeroSectionProps) {
             <Button
               asChild
               variant="outline"
-              className="h-10 px-4 rounded-xl border-border/80 hover:border-primary/50 hover:bg-accent/40 font-semibold text-xs transition-colors"
+              className="h-10 px-4 rounded-xl border-border hover:border-foreground/30 hover:bg-accent/40 font-semibold text-xs transition-colors"
             >
               <Link to="/writing">
                 <span>المقالات والأفكار</span>
@@ -97,7 +100,7 @@ export function HeroSection({ settings }: HeroSectionProps) {
             <Button
               asChild
               variant="ghost"
-              className="h-10 px-4 rounded-xl text-xs text-muted-foreground hover:text-foreground font-medium"
+              className="h-10 px-4 rounded-xl text-xs text-muted-foreground hover:text-foreground font-medium transition-colors"
             >
               <Link to="/contact">
                 <span>تواصل معي</span>
@@ -106,20 +109,25 @@ export function HeroSection({ settings }: HeroSectionProps) {
             </Button>
           </div>
 
+          {/* Direct Social Media Links Row */}
+          <div className="pt-2">
+            <SocialLinksBar settings={settings} />
+          </div>
+
           {/* Live Metrics Index Pills */}
-          <div className="pt-4 flex flex-wrap items-center gap-3 text-xs font-mono">
+          <div className="pt-2 flex flex-wrap items-center gap-3 text-xs font-mono">
             <div className="px-3.5 py-1.5 rounded-lg border border-border/70 bg-card flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+              <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/30" />
               <span className="text-muted-foreground">الكتب:</span>
               <span className="font-bold text-foreground">{booksCount} إصدارات</span>
             </div>
             <div className="px-3.5 py-1.5 rounded-lg border border-border/70 bg-card flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+              <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/30" />
               <span className="text-muted-foreground">البرمجيات:</span>
               <span className="font-bold text-foreground">{projectsCount} حرة</span>
             </div>
             <div className="px-3.5 py-1.5 rounded-lg border border-border/70 bg-card flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+              <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/30" />
               <span className="text-muted-foreground">الأبحاث:</span>
               <span className="font-bold text-foreground">{researchCount} أوراق</span>
             </div>
@@ -165,15 +173,14 @@ export function HeroSection({ settings }: HeroSectionProps) {
             ) : (
               /* Bespoke Editorial Monograph Card when no photo uploaded yet */
               <div className="art-frame relative rounded-2xl overflow-hidden bg-card border border-border/80 p-6 space-y-5 shadow-sm text-center">
-                <div className="w-28 h-28 mx-auto rounded-full bg-gradient-to-br from-primary/15 via-accent to-muted border-2 border-primary/30 flex items-center justify-center shadow-xs">
-                  <span className="font-display text-5xl font-bold text-primary select-none">
+                <div className="w-28 h-28 mx-auto rounded-full bg-accent/50 border border-border flex items-center justify-center shadow-xs">
+                  <span className="font-display text-5xl font-bold text-foreground/85 select-none">
                     {settings.siteName ? settings.siteName.charAt(0) : "خ"}
                   </span>
                 </div>
 
                 <div className="space-y-1.5">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-primary/10 text-primary text-[11px] font-mono font-bold">
-                    <Sparkles className="w-3 h-3" />
+                  <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-muted text-muted-foreground text-[11px] font-mono">
                     <span>مِلفُ الأَعْمَال الشَّخْصِي</span>
                   </div>
                   <h3 className="font-display text-2xl font-bold text-foreground">

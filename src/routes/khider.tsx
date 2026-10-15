@@ -23,6 +23,13 @@ import {
   Code2,
   GraduationCap,
   Image as ImageIcon,
+  Share2,
+  Github,
+  Twitter,
+  Linkedin,
+  Send,
+  Globe,
+  BookOpen,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -874,6 +881,141 @@ function KhiderAdminPage() {
                     onChange={(e) => setSettings({ ...settings, email: e.target.value })}
                     className="text-sm font-mono text-left"
                   />
+                </div>
+
+                {/* Social Media Accounts */}
+                <div className="p-4 sm:p-5 rounded-xl border border-border/80 bg-card space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Share2 className="w-4 h-4 text-primary" />
+                    <h3 className="font-sans font-bold text-sm text-foreground">
+                      روابط مواقع التواصل الاجتماعي والحسابات الرسمية
+                    </h3>
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    أدخل روابط حساباتك المباشرة هنا (مثل حساب GitHub، تويتر، لينكد إن، إلخ)، وستظهر تلقائياً كأزرار تواصل راقية في واجهة البورتفوليو وصفحة عنّي وتذييل الموقع.
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    {/* GitHub */}
+                    <div className="space-y-1">
+                      <Label className="text-xs font-semibold flex items-center gap-1.5">
+                        <Github className="w-3.5 h-3.5" />
+                        <span>رابط حساب GitHub</span>
+                      </Label>
+                      <Input
+                        dir="ltr"
+                        value={settings.socialLinks?.github || ""}
+                        onChange={(e) =>
+                          setSettings({
+                            ...settings,
+                            socialLinks: { ...(settings.socialLinks || {}), github: e.target.value },
+                          })
+                        }
+                        placeholder="https://github.com/khdrgdo"
+                        className="text-xs font-mono text-left"
+                      />
+                    </div>
+
+                    {/* Twitter / X */}
+                    <div className="space-y-1">
+                      <Label className="text-xs font-semibold flex items-center gap-1.5">
+                        <Twitter className="w-3.5 h-3.5" />
+                        <span>رابط منصة X (تويتر)</span>
+                      </Label>
+                      <Input
+                        dir="ltr"
+                        value={settings.socialLinks?.twitter || ""}
+                        onChange={(e) =>
+                          setSettings({
+                            ...settings,
+                            socialLinks: { ...(settings.socialLinks || {}), twitter: e.target.value },
+                          })
+                        }
+                        placeholder="https://x.com/username"
+                        className="text-xs font-mono text-left"
+                      />
+                    </div>
+
+                    {/* LinkedIn */}
+                    <div className="space-y-1">
+                      <Label className="text-xs font-semibold flex items-center gap-1.5">
+                        <Linkedin className="w-3.5 h-3.5" />
+                        <span>رابط حساب LinkedIn</span>
+                      </Label>
+                      <Input
+                        dir="ltr"
+                        value={settings.socialLinks?.linkedin || ""}
+                        onChange={(e) =>
+                          setSettings({
+                            ...settings,
+                            socialLinks: { ...(settings.socialLinks || {}), linkedin: e.target.value },
+                          })
+                        }
+                        placeholder="https://linkedin.com/in/username"
+                        className="text-xs font-mono text-left"
+                      />
+                    </div>
+
+                    {/* Telegram */}
+                    <div className="space-y-1">
+                      <Label className="text-xs font-semibold flex items-center gap-1.5">
+                        <Send className="w-3.5 h-3.5" />
+                        <span>رابط Telegram</span>
+                      </Label>
+                      <Input
+                        dir="ltr"
+                        value={settings.socialLinks?.telegram || ""}
+                        onChange={(e) =>
+                          setSettings({
+                            ...settings,
+                            socialLinks: { ...(settings.socialLinks || {}), telegram: e.target.value },
+                          })
+                        }
+                        placeholder="https://t.me/username"
+                        className="text-xs font-mono text-left"
+                      />
+                    </div>
+
+                    {/* Substack / Blog */}
+                    <div className="space-y-1">
+                      <Label className="text-xs font-semibold flex items-center gap-1.5">
+                        <BookOpen className="w-3.5 h-3.5" />
+                        <span>رابط Substack أو المدونة</span>
+                      </Label>
+                      <Input
+                        dir="ltr"
+                        value={settings.socialLinks?.substack || ""}
+                        onChange={(e) =>
+                          setSettings({
+                            ...settings,
+                            socialLinks: { ...(settings.socialLinks || {}), substack: e.target.value },
+                          })
+                        }
+                        placeholder="https://username.substack.com"
+                        className="text-xs font-mono text-left"
+                      />
+                    </div>
+
+                    {/* Personal Website */}
+                    <div className="space-y-1">
+                      <Label className="text-xs font-semibold flex items-center gap-1.5">
+                        <Globe className="w-3.5 h-3.5" />
+                        <span>رابط موقع إضافي أو مدونة</span>
+                      </Label>
+                      <Input
+                        dir="ltr"
+                        value={settings.socialLinks?.website || ""}
+                        onChange={(e) =>
+                          setSettings({
+                            ...settings,
+                            socialLinks: { ...(settings.socialLinks || {}), website: e.target.value },
+                          })
+                        }
+                        placeholder="https://example.com"
+                        className="text-xs font-mono text-left"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
 

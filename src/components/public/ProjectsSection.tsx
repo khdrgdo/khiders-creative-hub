@@ -50,9 +50,9 @@ export function ProjectsSection({ projects, showHeading = true, limit }: Project
               {/* Terminal / Code Window Bar */}
               <div className="px-4 py-2.5 bg-muted/40 border-b border-border/50 flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-rose-400/80" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400/80" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
+                  <span className="w-2 h-2 rounded-full bg-border" />
+                  <span className="w-2 h-2 rounded-full bg-border" />
+                  <span className="w-2 h-2 rounded-full bg-border" />
                 </div>
                 <div className="flex items-center gap-2 text-[11px] font-mono text-muted-foreground">
                   <Terminal className="w-3 h-3 text-primary" />

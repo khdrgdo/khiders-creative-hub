@@ -6,12 +6,16 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
+import { useLiveSettings } from "@/lib/content-store";
+import { SocialLinksBar } from "@/components/public/SocialLinksBar";
 
 interface ContactSectionProps {
   email?: string;
 }
 
-export function ContactSection({ email = "khider.mamoun@gmail.com" }: ContactSectionProps) {
+export function ContactSection({ email }: ContactSectionProps) {
+  const settings = useLiveSettings();
+  const contactEmail = email || settings.email || "khdrmamon@gmail.com";
   const [name, setName] = useState("");
   const [senderEmail, setSenderEmail] = useState("");
   const [subject, setSubject] = useState("");
@@ -79,28 +83,33 @@ export function ContactSection({ email = "khider.mamoun@gmail.com" }: ContactSec
 
           <div className="space-y-4 pt-2 text-sm font-sans">
             <div className="flex items-center gap-3 text-foreground">
-              <div className="w-9 h-9 rounded-xl bg-accent/80 border border-lavender/40 flex items-center justify-center text-primary shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-card border border-border/80 flex items-center justify-center text-foreground shrink-0 shadow-xs">
                 <Mail className="w-4 h-4" />
               </div>
               <div>
                 <span className="text-xs text-muted-foreground block">البريد المباشر</span>
                 <a
-                  href={`mailto:${email}`}
-                  className="font-mono text-sm hover:text-primary transition-colors dir-ltr inline-block"
+                  href={`mailto:${contactEmail}`}
+                  className="font-mono text-sm hover:underline transition-colors dir-ltr inline-block text-foreground font-semibold"
                 >
-                  {email}
+                  {contactEmail}
                 </a>
               </div>
             </div>
 
             <div className="flex items-center gap-3 text-foreground">
-              <div className="w-9 h-9 rounded-xl bg-accent/80 border border-lavender/40 flex items-center justify-center text-primary shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-card border border-border/80 flex items-center justify-center text-foreground shrink-0 shadow-xs">
                 <MapPin className="w-4 h-4" />
               </div>
               <div>
                 <span className="text-xs text-muted-foreground block">المنطقة والوقت</span>
                 <span className="text-sm">GMT+2 (توقيت الخرطوم / القاهرة)</span>
               </div>
+            </div>
+
+            {/* Social media direct links */}
+            <div className="pt-4 border-t border-border/60">
+              <SocialLinksBar settings={settings} />
             </div>
           </div>
         </div>

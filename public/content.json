@@ -506,10 +506,20 @@
         "text": "دراسة هندسة الحاسوب والبرمجيات مع الاهتمام بالدراسات الإنسانية واللسانيات المقارنة."
       }
     ],
-    "primaryColor": "oklch(0.52 0.11 295)",
-    "accentColor": "oklch(0.93 0.035 303)",
+    "primaryColor": "oklch(0.38 0.035 55)",
+    "accentColor": "oklch(0.94 0.008 75)",
     "logoUrl": "",
+    "avatarUrl": "",
     "email": "khdrmamon@gmail.com",
+    "socialLinks": {
+      "github": "https://github.com/khdrgdo",
+      "twitter": "https://x.com",
+      "linkedin": "",
+      "telegram": "",
+      "substack": "",
+      "website": "",
+      "youtube": ""
+    },
     "socials": [
       {
         "label": "GitHub",

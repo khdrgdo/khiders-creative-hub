@@ -128,7 +128,7 @@ export function WritingSection({ articles, showHeading = true, limit }: WritingS
                   onClick={copyArticleLink}
                   className="h-7 px-2.5 text-xs gap-1"
                 >
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5" />}
+                  {copied ? <Check className="w-3.5 h-3.5 text-foreground" /> : <Share2 className="w-3.5 h-3.5" />}
                   <span>{copied ? "تم النسخ" : "مشاركة"}</span>
                 </Button>
               </div>

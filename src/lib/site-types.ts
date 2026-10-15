@@ -8,12 +8,23 @@ export type HomeSection = Tables<"home_sections">;
 export interface LinkItem { label: string; url: string }
 export interface NavItem { label: string; to: string }
 
+export interface SocialLinks {
+  github?: string;
+  twitter?: string;
+  linkedin?: string;
+  telegram?: string;
+  substack?: string;
+  website?: string;
+  youtube?: string;
+}
+
 export interface SiteSettings {
   siteName: string;
   tagline: string;
   intro: string;
   about: string;
   avatarUrl?: string;
+  socialLinks?: SocialLinks;
   interests: string[];
   skills: string[];
   journey: { year: string; text: string }[];
@@ -32,6 +43,15 @@ export const defaultSettings: SiteSettings = {
   intro: "",
   about: "",
   avatarUrl: "",
+  socialLinks: {
+    github: "https://github.com/khdrgdo",
+    twitter: "https://x.com",
+    linkedin: "",
+    telegram: "",
+    substack: "",
+    website: "",
+    youtube: "",
+  },
   interests: [],
   skills: [],
   journey: [],

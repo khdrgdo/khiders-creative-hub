@@ -52,7 +52,14 @@ export function getStoredSettings(): SiteSettings {
     if (raw) {
       const parsed = JSON.parse(raw);
       if (parsed && typeof parsed === "object") {
-        return { ...initialSiteSettings, ...parsed };
+        return {
+          ...initialSiteSettings,
+          ...parsed,
+          socialLinks: {
+            ...initialSiteSettings.socialLinks,
+            ...(parsed.socialLinks || {}),
+          },
+        };
       }
     }
   } catch (err) {

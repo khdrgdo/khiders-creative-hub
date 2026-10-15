@@ -17,6 +17,10 @@ export function mergeSettings(dbSettings: unknown): SiteSettings {
     intro: s.intro || base.intro,
     about: s.about || base.about,
     avatarUrl: s.avatarUrl || base.avatarUrl || "",
+    socialLinks: {
+      ...(base.socialLinks || {}),
+      ...(s.socialLinks || {}),
+    },
     interests: s.interests?.length ? s.interests : base.interests,
     skills: s.skills?.length ? s.skills : base.skills,
     journey: s.journey?.length ? s.journey : base.journey,

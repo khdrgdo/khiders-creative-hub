@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Github, Twitter, Linkedin, Mail, ArrowUpRight } from "lucide-react";
+import { Github, Twitter, Linkedin, Mail, ArrowUpRight, Send, Globe, BookOpen } from "lucide-react";
 
 import { useLiveSettings } from "@/lib/content-store";
 
@@ -64,34 +64,94 @@ export function Footer() {
               الروابط والتواصل
             </h4>
             <ul className="space-y-2 text-sm">
-              <li>
-                <a
-                  href="https://github.com/khdrgdo"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 hover:text-primary transition-colors"
-                >
-                  <Github className="w-3.5 h-3.5" />
-                  <span>GitHub</span>
-                  <ArrowUpRight className="w-3 h-3 text-muted-foreground" />
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://x.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 hover:text-primary transition-colors"
-                >
-                  <Twitter className="w-3.5 h-3.5" />
-                  <span>X / Twitter</span>
-                  <ArrowUpRight className="w-3 h-3 text-muted-foreground" />
-                </a>
-              </li>
+              {settings.socialLinks?.github && (
+                <li>
+                  <a
+                    href={settings.socialLinks.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 hover:text-foreground text-muted-foreground transition-colors"
+                  >
+                    <Github className="w-3.5 h-3.5" />
+                    <span>GitHub</span>
+                    <ArrowUpRight className="w-3 h-3 opacity-60" />
+                  </a>
+                </li>
+              )}
+              {settings.socialLinks?.twitter && (
+                <li>
+                  <a
+                    href={settings.socialLinks.twitter}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 hover:text-foreground text-muted-foreground transition-colors"
+                  >
+                    <Twitter className="w-3.5 h-3.5" />
+                    <span>X / Twitter</span>
+                    <ArrowUpRight className="w-3 h-3 opacity-60" />
+                  </a>
+                </li>
+              )}
+              {settings.socialLinks?.linkedin && (
+                <li>
+                  <a
+                    href={settings.socialLinks.linkedin}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 hover:text-foreground text-muted-foreground transition-colors"
+                  >
+                    <Linkedin className="w-3.5 h-3.5" />
+                    <span>LinkedIn</span>
+                    <ArrowUpRight className="w-3 h-3 opacity-60" />
+                  </a>
+                </li>
+              )}
+              {settings.socialLinks?.telegram && (
+                <li>
+                  <a
+                    href={settings.socialLinks.telegram}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 hover:text-foreground text-muted-foreground transition-colors"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    <span>Telegram</span>
+                    <ArrowUpRight className="w-3 h-3 opacity-60" />
+                  </a>
+                </li>
+              )}
+              {settings.socialLinks?.substack && (
+                <li>
+                  <a
+                    href={settings.socialLinks.substack}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 hover:text-foreground text-muted-foreground transition-colors"
+                  >
+                    <BookOpen className="w-3.5 h-3.5" />
+                    <span>Substack</span>
+                    <ArrowUpRight className="w-3 h-3 opacity-60" />
+                  </a>
+                </li>
+              )}
+              {settings.socialLinks?.website && (
+                <li>
+                  <a
+                    href={settings.socialLinks.website}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 hover:text-foreground text-muted-foreground transition-colors"
+                  >
+                    <Globe className="w-3.5 h-3.5" />
+                    <span>الموقع الشخصي</span>
+                    <ArrowUpRight className="w-3 h-3 opacity-60" />
+                  </a>
+                </li>
+              )}
               <li>
                 <Link
                   to="/contact"
-                  className="inline-flex items-center gap-1.5 hover:text-primary transition-colors"
+                  className="inline-flex items-center gap-1.5 hover:text-foreground text-muted-foreground transition-colors"
                 >
                   <Mail className="w-3.5 h-3.5" />
                   <span>مراسلة مباشرة</span>

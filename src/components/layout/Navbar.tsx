@@ -50,9 +50,8 @@ export function Navbar() {
             <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-foreground leading-tight">
               {settings.siteName || "خضر مأمون"}
             </span>
-            <span className="text-[11px] font-sans text-muted-foreground/80 tracking-wide flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse" />
-              <span>{settings.tagline || "فِكْر وشَفْرَة"}</span>
+            <span className="text-[11px] font-sans text-muted-foreground/75 tracking-wide">
+              {settings.tagline || "فِكْر وشَفْرَة"}
             </span>
           </div>
         </Link>
