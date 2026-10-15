@@ -38,6 +38,7 @@ export const initialSiteSettings: SiteSettings = {
   primaryColor: "oklch(0.52 0.11 295)",
   accentColor: "oklch(0.93 0.035 303)",
   logoUrl: "",
+  avatarUrl: "",
   email: "khdrmamon@gmail.com",
   socials: [
     { label: "GitHub", url: "https://github.com/khdrgdo" },

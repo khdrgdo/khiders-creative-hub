@@ -13,6 +13,7 @@ export interface SiteSettings {
   tagline: string;
   intro: string;
   about: string;
+  avatarUrl?: string;
   interests: string[];
   skills: string[];
   journey: { year: string; text: string }[];
@@ -30,6 +31,7 @@ export const defaultSettings: SiteSettings = {
   tagline: "",
   intro: "",
   about: "",
+  avatarUrl: "",
   interests: [],
   skills: [],
   journey: [],

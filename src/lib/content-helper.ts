@@ -16,6 +16,7 @@ export function mergeSettings(dbSettings: unknown): SiteSettings {
     tagline: s.tagline || base.tagline,
     intro: s.intro || base.intro,
     about: s.about || base.about,
+    avatarUrl: s.avatarUrl || base.avatarUrl || "",
     interests: s.interests?.length ? s.interests : base.interests,
     skills: s.skills?.length ? s.skills : base.skills,
     journey: s.journey?.length ? s.journey : base.journey,

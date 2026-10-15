@@ -33,15 +33,28 @@ export function Navbar() {
         {/* Brand / Logo */}
         <Link
           to="/"
-          className="group flex flex-col justify-center transition-opacity hover:opacity-90 focus:outline-none"
+          className="group flex items-center gap-3 transition-opacity hover:opacity-90 focus:outline-none"
         >
-          <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-            {settings.siteName || "خضر مأمون"}
-          </span>
-          <span className="text-[11px] font-sans text-muted-foreground/80 tracking-wide flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-            <span>{settings.tagline || "فِكْر وشَفْرَة"}</span>
-          </span>
+          {settings.avatarUrl ? (
+            <img
+              src={settings.avatarUrl}
+              alt={settings.siteName || "خضر مأمون"}
+              className="w-10 h-10 rounded-full object-cover ring-2 ring-border/80 group-hover:ring-primary/40 transition-all shadow-xs shrink-0"
+            />
+          ) : (
+            <div className="w-10 h-10 rounded-full bg-muted/70 border border-border/80 flex items-center justify-center font-display font-bold text-base text-foreground/85 group-hover:border-primary/40 transition-colors shrink-0">
+              {(settings.siteName || "خ")[0]}
+            </div>
+          )}
+          <div className="flex flex-col justify-center">
+            <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-foreground leading-tight">
+              {settings.siteName || "خضر مأمون"}
+            </span>
+            <span className="text-[11px] font-sans text-muted-foreground/80 tracking-wide flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse" />
+              <span>{settings.tagline || "فِكْر وشَفْرَة"}</span>
+            </span>
+          </div>
         </Link>
 
         {/* Desktop Navigation */}

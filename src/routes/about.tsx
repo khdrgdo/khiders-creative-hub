@@ -37,22 +37,42 @@ function AboutPage() {
         </p>
       </div>
 
-      {/* Main Biography */}
-      <section className="space-y-6 prose-ar text-base sm:text-lg text-foreground/90 leading-loose">
-        <p>
-          أنا <strong className="text-foreground">{settings.siteName}</strong>، مهندس
-          برمجيات وكاتب وباحث سوداني مستقل. تشكلت رؤيتي عبر سنوات من الترحال
-          بين كود الحاسوب وكتب الفلسفة والأدب، حيث أرى في البرمجة ضرباً من ضروب
-          التعبير الإنساني الرفيع وليس مجرد أداة نفعية بحتة.
-        </p>
+      {/* Main Biography & Portrait Section */}
+      <section className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+        {settings.avatarUrl && (
+          <div className="md:col-span-5 order-first md:order-last">
+            <div className="art-frame rounded-2xl overflow-hidden bg-card border border-border/80 p-2.5 shadow-sm">
+              <div className="aspect-[4/5] rounded-xl overflow-hidden bg-muted">
+                <img
+                  src={settings.avatarUrl}
+                  alt={settings.siteName}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-3 text-center">
+                <span className="font-display font-bold text-sm text-foreground block">
+                  {settings.siteName}
+                </span>
+                <span className="text-[11px] font-sans text-muted-foreground">
+                  {settings.tagline}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
 
-        <p>
-          ينصب تركيزي واهتمامي المستمر على قضايا السيادة الرقمية، وهندسة النظم
-          البرمجية الخفيفة، واللسانيات الحاسوبية للغة العربية. أؤمن بأن بلدان
-          الجنوب العالمي بحاجة ماسة إلى تطوير بنيتها المعرفية والبرمجية
-          المستقلة، بعيداً عن الاحتكارات التقنية الكبرى، لصيانة الذاكرة
-          والهوية وتوفير أدوات تخدم التحرر الفكري.
-        </p>
+        <div className={settings.avatarUrl ? "md:col-span-7 space-y-6 prose-ar text-base text-foreground/90 leading-loose" : "md:col-span-12 space-y-6 prose-ar text-base sm:text-lg text-foreground/90 leading-loose"}>
+          <p>
+            أنا <strong className="text-foreground">{settings.siteName}</strong>، مهندس
+            برمجيات وكاتب وباحث سوداني مستقل. تشكلت رؤيتي عبر سنوات من الترحال
+            بين كود الحاسوب وكتب الفلسفة والأدب، حيث أرى في البرمجة ضرباً من ضروب
+            التعبير الإنساني الرفيع وليس مجرد أداة نفعية بحتة.
+          </p>
+
+          <p>
+            {settings.about}
+          </p>
+        </div>
       </section>
 
       {/* Journey & Timeline */}

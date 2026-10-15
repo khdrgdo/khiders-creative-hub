@@ -61,6 +61,18 @@ export function ProjectsSection({ projects, showHeading = true, limit }: Project
                 <span className="font-mono text-xs text-primary font-bold">{projIndex}</span>
               </div>
 
+              {/* Project Screenshot / Cover if provided */}
+              {project.cover_url && (
+                <div className="relative aspect-video w-full overflow-hidden bg-muted/30 border-b border-border/50">
+                  <img
+                    src={project.cover_url}
+                    alt={project.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                </div>
+              )}
+
               {/* Body */}
               <div className="p-6 space-y-4">
                 <div className="space-y-2">

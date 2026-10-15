@@ -45,6 +45,7 @@ import {
 } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { oauthReturnPath } from "@/lib/oauth-return-path";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 import type { ContentItem, ContentType, SiteSettings } from "@/lib/site-types";
 import { slugify, typeConfig } from "@/lib/site-types";
 import {
@@ -762,6 +763,28 @@ function KhiderAdminPage() {
                 </p>
               </div>
 
+              {/* Personal Photo (Portrait / Avatar) */}
+              <div className="p-4 sm:p-5 rounded-xl border border-primary/25 bg-accent/20 space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-primary" />
+                  <h3 className="font-sans font-bold text-sm text-foreground">
+                    الصورة الشخصية لصاحب الموقع (خضر مأمون)
+                  </h3>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  هذه الصورة هي الواجهة البصرية لبورتفوليو أعمالك، وتظهر في قسم الترحيب الرئيسي (Hero)، وصفحة "عنّي"، وشريط التنقل.
+                </p>
+                <ImageUploader
+                  value={settings.avatarUrl}
+                  onChange={(url) => setSettings({ ...settings, avatarUrl: url })}
+                  label="صورتك الشخصية (رفع مباشر من جهازك أو رابط)"
+                  aspectRatio="square"
+                  maxWidth={800}
+                  maxHeight={800}
+                  hint="اختر صورتك الشخصية من جهازك وسيتم حفظها وعرضها فورياً"
+                />
+              </div>
+
               <div className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
@@ -982,16 +1005,29 @@ function KhiderAdminPage() {
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <Label className="text-xs font-semibold">رابط صورة الغلاف أو العمل البصري (Image URL)</Label>
-                <Input
-                  dir="ltr"
-                  value={editingItem.cover_url || ""}
-                  onChange={(e) => setEditingItem({ ...editingItem, cover_url: e.target.value })}
-                  placeholder="https://..."
-                  className="h-9 text-xs font-mono text-left"
-                />
-              </div>
+              <ImageUploader
+                value={editingItem.cover_url}
+                onChange={(url) => setEditingItem({ ...editingItem, cover_url: url })}
+                label={
+                  editingItem.type === "book"
+                    ? "غلاف الكتاب (رفع صورة من جهازك أو رابط)"
+                    : editingItem.type === "gallery"
+                    ? "صورة المعرض الفوتوغرافي (رفع صورة من جهازك أو رابط)"
+                    : editingItem.type === "project"
+                    ? "صورة أو لقطة المشروع (رفع صورة من جهازك أو رابط)"
+                    : "صورة الغلاف أو الخلفية (رفع صورة من جهازك أو رابط)"
+                }
+                aspectRatio={
+                  editingItem.type === "book"
+                    ? "portrait"
+                    : editingItem.type === "gallery"
+                    ? "landscape"
+                    : editingItem.type === "project"
+                    ? "video"
+                    : "landscape"
+                }
+                hint="اختر صورة من جهازك وسيتم ضغطها وتضمينها فورياً في الموقع"
+              />
 
               {/* Dynamic Type-specific Meta Fields */}
               {editingItem.type === "book" && (
