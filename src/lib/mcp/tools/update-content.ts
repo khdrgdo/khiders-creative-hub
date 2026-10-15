@@ -31,7 +31,7 @@ export default defineTool({
     const { data: before } = await supabase.from("content_items").select("status, published_at, deleted_at").eq("id", id).maybeSingle();
     if (!before) throw new ToolError("Item not found.");
     if (before.deleted_at) throw new ToolError("Item is in the trash; restore it first.");
-    if (patch.status === "published" && !before.published_at) patch.published_at = new Date().toISOString();
+    if (patch["status"] === "published" && !before.published_at) patch["published_at"] = new Date().toISOString();
     const { data, error } = await supabase.from("content_items").update(patch).eq("id", id).select("id, title, status").maybeSingle();
     if (error) throw new ToolError(error.message);
     if (!data) throw new ToolError("Item not found.");
