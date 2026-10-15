@@ -1,6 +1,6 @@
 import { defineTool, ToolError } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-import { supabaseForUser } from "../supabase";
+import { requireAdmin, audit } from "../admin";
 import { slugify } from "@/lib/site-types";
 
 export default defineTool({
@@ -21,8 +21,9 @@ export default defineTool({
   },
   annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: false },
   handler: async (input, ctx) => {
+    const supabase = await requireAdmin(ctx);
     const status = input.status ?? "draft";
-    const { data, error } = await supabaseForUser(ctx)
+    const { data, error } = await supabase
       .from("content_items")
       .insert({
         type: input.type,
@@ -40,7 +41,8 @@ export default defineTool({
       })
       .select("id, slug, status")
       .single();
-    if (error) throw new ToolError(`Could not save (only the site admin can add content): ${error.message}`);
+    if (error) throw new ToolError(`Could not save: ${error.message}`);
+    await audit(supabase, ctx, "create_content", data.id, { title: input.title, type: input.type, status });
     return {
       content: [{ type: "text", text: `Saved "${input.title}" as ${data.status} (id ${data.id}).` }],
       structuredContent: { id: data.id, slug: data.slug, status: data.status },
