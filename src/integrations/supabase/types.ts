@@ -26,6 +26,36 @@ export type Database = {
         }
         Relationships: []
       }
+      audit_log: {
+        Row: {
+          action: string
+          created_at: string
+          details: Json
+          id: string
+          target_id: string | null
+          target_table: string
+          user_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: Json
+          id?: string
+          target_id?: string | null
+          target_table: string
+          user_id?: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: Json
+          id?: string
+          target_id?: string | null
+          target_table?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           created_at: string
@@ -62,6 +92,7 @@ export type Database = {
           category: string
           cover_url: string | null
           created_at: string
+          deleted_at: string | null
           excerpt: string
           featured: boolean
           file_path: string | null
@@ -83,6 +114,7 @@ export type Database = {
           category?: string
           cover_url?: string | null
           created_at?: string
+          deleted_at?: string | null
           excerpt?: string
           featured?: boolean
           file_path?: string | null
@@ -104,6 +136,7 @@ export type Database = {
           category?: string
           cover_url?: string | null
           created_at?: string
+          deleted_at?: string | null
           excerpt?: string
           featured?: boolean
           file_path?: string | null
@@ -243,6 +276,7 @@ export type Database = {
         Returns: boolean
       }
       is_admin: { Args: never; Returns: boolean }
+      security_overview: { Args: never; Returns: Json }
     }
     Enums: {
       app_role: "admin"
