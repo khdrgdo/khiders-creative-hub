@@ -1,4 +1,5 @@
 import { ToolError, type ToolContext } from "@lovable.dev/mcp-js";
+import type { Tables } from "@/integrations/supabase/types";
 import { supabaseForUser } from "./supabase";
 
 /** Server-side admin gate: asks the database (is_admin) as the verified caller. */
@@ -32,7 +33,7 @@ export async function audit(
 
 export const CONTENT_TYPES = ["book", "project", "article", "research", "gallery"] as const;
 
-export function toItemJson(r: Record<string, unknown>) {
+export function toItemJson(r: Tables<"content_items">) {
   return {
     id: String(r.id),
     type: String(r.type),

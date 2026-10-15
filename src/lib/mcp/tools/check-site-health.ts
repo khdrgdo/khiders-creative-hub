@@ -45,8 +45,8 @@ export default defineTool({
     const slugGroups = new Map<string, typeof items>();
     for (const i of items) slugGroups.set(i.slug, [...(slugGroups.get(i.slug) ?? []), i]);
     const duplicates = [
-      ...[...groups.values()].filter((g) => g.length > 1).map((g) => ({ reason: "same type and title", ids: g.map((x) => x.id), title: g[0].title })),
-      ...[...slugGroups.values()].filter((g) => g.length > 1).map((g) => ({ reason: "same slug", ids: g.map((x) => x.id), title: g[0].slug })),
+      ...[...groups.values()].filter((g) => g.length > 1).map((g) => ({ reason: "same type and title", ids: g.map((x) => x.id), title: g[0]?.title ?? "" })),
+      ...[...slugGroups.values()].filter((g) => g.length > 1).map((g) => ({ reason: "same slug", ids: g.map((x) => x.id), title: g[0]?.slug ?? "" })),
     ];
 
     const urls = new Map<string, string[]>();
