@@ -72,6 +72,11 @@ export const Route = createFileRoute("/khider")({
   head: () => ({
     meta: [
       { title: "لوحة التحكم الإدارية | خضر مأمون" },
+      { name: "description", content: "إدارة محتوى وألوان موقع خضر مأمون." },
+      { property: "og:title", content: "لوحة التحكم الإدارية | خضر مأمون" },
+      { property: "og:description", content: "إدارة محتوى وألوان موقع خضر مأمون." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),

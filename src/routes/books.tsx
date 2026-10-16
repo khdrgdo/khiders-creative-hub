@@ -9,6 +9,10 @@ import type { ContentItem } from "@/lib/site-types";
 export const Route = createFileRoute("/books")({
   head: () => ({
     meta: [
+      { property: "og:title", content: "الكتب والإصدارات | خضر مأمون" },
+      { property: "og:description", content: "الكتب الفلسفية والأدبية والتقنية المنشورة للكاتب خضر مأمون مع إمكانية التحميل المباشر." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "الكتب والإصدارات | خضر مأمون" },
       {
         name: "description",

@@ -9,6 +9,10 @@ import type { ContentItem } from "@/lib/site-types";
 export const Route = createFileRoute("/gallery")({
   head: () => ({
     meta: [
+      { property: "og:title", content: "معرض الصور والأعمال البصرية | خضر مأمون" },
+      { property: "og:description", content: "لقطات فوتوغرافية ومشاهد توثيقية من السودان ودفاتر الترحال بعدسة خضر مأمون." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "معرض الصور والأعمال البصرية | خضر مأمون" },
       {
         name: "description",

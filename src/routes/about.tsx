@@ -9,6 +9,10 @@ import { SocialLinksBar } from "@/components/public/SocialLinksBar";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
+      { property: "og:title", content: "عن خضر مأمون | السيرة والفكر والمسيرة" },
+      { property: "og:description", content: "السيرة الذاتية والفكرية للمبرمج والكاتب والباحث المستقل خضر مأمون." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "عن خضر مأمون | السيرة والفكر والمسيرة" },
       {
         name: "description",
