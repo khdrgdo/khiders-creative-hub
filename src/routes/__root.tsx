@@ -15,6 +15,7 @@ import { Toaster } from "sonner";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navbar } from "../components/layout/Navbar";
+import { SiteTheme } from "../components/layout/SiteTheme";
 import { Footer } from "../components/layout/Footer";
 
 function NotFoundComponent() {
@@ -145,6 +146,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <SiteTheme />
       <Toaster position="top-center" richColors closeButton />
 
       {isAdminRoute ? (
@@ -154,7 +156,7 @@ function RootComponent() {
         // Public website layout
         <div className="min-h-screen flex flex-col">
           <Navbar />
-          <main key={pathname} className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 pt-6 sm:pt-8 pb-16 page-enter">
+          <main key={pathname} className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 pt-6 sm:pt-8 pb-16 page-enter">
             <Outlet />
           </main>
           <Footer />

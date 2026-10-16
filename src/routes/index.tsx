@@ -13,6 +13,13 @@ import { ContactSection } from "@/components/public/ContactSection";
 import type { ContentItem } from "@/lib/site-types";
 
 export const Route = createFileRoute("/")({
+  head: () => ({ meta: [
+    { title: "خضر مأمون | برمجة وكتابة وبحث مستقل" },
+    { name: "description", content: "الأعمال المختارة والكتب والكتابات والأبحاث المستقلة لخضر مأمون." },
+    { property: "og:title", content: "خضر مأمون | برمجة وكتابة وبحث مستقل" },
+    { property: "og:description", content: "الأعمال المختارة والكتب والكتابات والأبحاث المستقلة لخضر مأمون." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: IndexPage,
 });
 
@@ -30,19 +37,23 @@ function IndexPage() {
   const gallery = filterByType(items, "gallery");
 
   return (
-    <div className="space-y-16 sm:space-y-24">
+    <div className="editorial-home">
       {/* 1. Hero */}
       <HeroSection settings={settings} />
 
       <div className="rule-ornament" />
 
-      {/* 2. Featured Books */}
+      <ProjectsSection projects={projects} limit={4} />
+      <section className="editorial-skills">
+        <div><h2 className="font-display font-bold mb-5">المهارات <span className="text-primary">والخبرات</span></h2><ul className="text-sm">{settings.skills.map((skill) => <li key={skill}>{skill}</li>)}</ul></div>
+        <div><h2 className="font-display font-bold mb-5">الفكر <span className="text-primary">والاهتمامات</span></h2><ul className="text-sm">{settings.interests.map((interest) => <li key={interest}>{interest}</li>)}</ul></div>
+      </section>
       <BooksSection books={books} limit={2} />
 
       <div className="rule-ornament" />
 
       {/* 3. Selected Software Projects */}
-      <ProjectsSection projects={projects} limit={2} />
+
 
       <div className="rule-ornament" />
 

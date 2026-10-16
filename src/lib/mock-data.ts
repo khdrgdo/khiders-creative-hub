@@ -94,6 +94,7 @@ export const defaultContentItems: ContentItem[] = [
     sort_order: 1,
     published_at: "2024-03-15T00:00:00Z",
     created_at: "2024-03-15T00:00:00Z",
+    deleted_at: null,
     updated_at: "2024-03-15T00:00:00Z",
   },
   {
@@ -116,6 +117,7 @@ export const defaultContentItems: ContentItem[] = [
     sort_order: 2,
     published_at: "2023-11-20T00:00:00Z",
     created_at: "2023-11-20T00:00:00Z",
+    deleted_at: null,
     updated_at: "2023-11-20T00:00:00Z",
   },
   {
@@ -138,6 +140,7 @@ export const defaultContentItems: ContentItem[] = [
     sort_order: 3,
     published_at: "2024-06-10T00:00:00Z",
     created_at: "2024-06-10T00:00:00Z",
+    deleted_at: null,
     updated_at: "2024-06-10T00:00:00Z",
   },
 
@@ -165,6 +168,7 @@ export const defaultContentItems: ContentItem[] = [
     sort_order: 1,
     published_at: "2024-05-01T00:00:00Z",
     created_at: "2024-05-01T00:00:00Z",
+    deleted_at: null,
     updated_at: "2024-05-01T00:00:00Z",
   },
   {
@@ -189,6 +193,7 @@ export const defaultContentItems: ContentItem[] = [
     sort_order: 2,
     published_at: "2024-02-15T00:00:00Z",
     created_at: "2024-02-15T00:00:00Z",
+    deleted_at: null,
     updated_at: "2024-02-15T00:00:00Z",
   },
   {
@@ -211,6 +216,7 @@ export const defaultContentItems: ContentItem[] = [
     sort_order: 3,
     published_at: "2023-09-10T00:00:00Z",
     created_at: "2023-09-10T00:00:00Z",
+    deleted_at: null,
     updated_at: "2023-09-10T00:00:00Z",
   },
 
@@ -239,6 +245,7 @@ export const defaultContentItems: ContentItem[] = [
     sort_order: 1,
     published_at: "2024-08-20T00:00:00Z",
     created_at: "2024-08-20T00:00:00Z",
+    deleted_at: null,
     updated_at: "2024-08-20T00:00:00Z",
   },
   {
@@ -263,6 +270,7 @@ export const defaultContentItems: ContentItem[] = [
     sort_order: 2,
     published_at: "2024-06-05T00:00:00Z",
     created_at: "2024-06-05T00:00:00Z",
+    deleted_at: null,
     updated_at: "2024-06-05T00:00:00Z",
   },
   {
@@ -287,6 +295,7 @@ export const defaultContentItems: ContentItem[] = [
     sort_order: 3,
     published_at: "2024-01-18T00:00:00Z",
     created_at: "2024-01-18T00:00:00Z",
+    deleted_at: null,
     updated_at: "2024-01-18T00:00:00Z",
   },
 
@@ -314,6 +323,7 @@ export const defaultContentItems: ContentItem[] = [
     sort_order: 1,
     published_at: "2024-04-10T00:00:00Z",
     created_at: "2024-04-10T00:00:00Z",
+    deleted_at: null,
     updated_at: "2024-04-10T00:00:00Z",
   },
   {
@@ -336,6 +346,7 @@ export const defaultContentItems: ContentItem[] = [
     sort_order: 2,
     published_at: "2023-12-01T00:00:00Z",
     created_at: "2023-12-01T00:00:00Z",
+    deleted_at: null,
     updated_at: "2023-12-01T00:00:00Z",
   },
 
@@ -361,6 +372,7 @@ export const defaultContentItems: ContentItem[] = [
     sort_order: 1,
     published_at: "2023-10-05T00:00:00Z",
     created_at: "2023-10-05T00:00:00Z",
+    deleted_at: null,
     updated_at: "2023-10-05T00:00:00Z",
   },
   {
@@ -384,6 +396,7 @@ export const defaultContentItems: ContentItem[] = [
     sort_order: 2,
     published_at: "2023-08-12T00:00:00Z",
     created_at: "2023-08-12T00:00:00Z",
+    deleted_at: null,
     updated_at: "2023-08-12T00:00:00Z",
   },
   {
@@ -407,6 +420,7 @@ export const defaultContentItems: ContentItem[] = [
     sort_order: 3,
     published_at: "2024-02-01T00:00:00Z",
     created_at: "2024-02-01T00:00:00Z",
+    deleted_at: null,
     updated_at: "2024-02-01T00:00:00Z",
   },
 ];
