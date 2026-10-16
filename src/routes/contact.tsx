@@ -8,6 +8,10 @@ import { ContactSection } from "@/components/public/ContactSection";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
+      { property: "og:title", content: "تواصل معي | خضر مأمون" },
+      { property: "og:description", content: "صفحة المراسلة والتواصل المباشر مع خضر مأمون لتبادل الآراء أو التعاون البرمجي والفكري." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "تواصل معي | خضر مأمون" },
       {
         name: "description",

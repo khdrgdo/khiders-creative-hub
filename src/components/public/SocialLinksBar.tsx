@@ -20,7 +20,7 @@ export function SocialLinksBar({
   const links: Array<{
     key: string;
     label: string;
-    url?: string;
+    url: string | undefined;
     icon: React.ComponentType<{ className?: string }>;
   }> = [
     { key: "github", label: "GitHub", url: socials.github, icon: Github },

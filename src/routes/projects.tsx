@@ -9,6 +9,10 @@ import type { ContentItem } from "@/lib/site-types";
 export const Route = createFileRoute("/projects")({
   head: () => ({
     meta: [
+      { property: "og:title", content: "المشاريع البرمجية الحرة | خضر مأمون" },
+      { property: "og:description", content: "المشاريع البرمجية مفتوحة المصدر، معالجة اللغات الطبيعية العربية، والأنظمة المستقلة." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "المشاريع البرمجية الحرة | خضر مأمون" },
       {
         name: "description",

@@ -7,7 +7,7 @@ import { optimizeImageFile } from "@/lib/image-upload";
 import { toast } from "sonner";
 
 interface ImageUploaderProps {
-  value?: string | null;
+  value?: string | null | undefined;
   onChange: (url: string) => void;
   label?: string;
   aspectRatio?: "square" | "portrait" | "landscape" | "video";

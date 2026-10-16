@@ -29,7 +29,7 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 w-full bg-background/85 backdrop-blur-md border-b border-border/50 transition-all duration-200">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 h-18 sm:h-22 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-18 sm:h-22 flex items-center justify-between">
         {/* Brand / Logo */}
         <Link
           to="/"
@@ -47,10 +47,10 @@ export function Navbar() {
             </div>
           )}
           <div className="flex flex-col justify-center">
-            <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-foreground leading-tight">
+            <span className="font-display text-2xl sm:text-3xl font-bold tracking-normal text-foreground leading-tight">
               {settings.siteName || "خضر مأمون"}
             </span>
-            <span className="text-[11px] font-sans text-muted-foreground/75 tracking-wide">
+            <span className="text-[11px] font-sans text-muted-foreground/75 tracking-normal">
               {settings.tagline || "فِكْر وشَفْرَة"}
             </span>
           </div>
@@ -59,7 +59,7 @@ export function Navbar() {
         {/* Desktop Navigation */}
         <nav
           aria-label="التنقل الرئيسي"
-          className="hidden md:flex items-center gap-1 bg-card/60 px-3 py-1.5 rounded-full border border-border/60 shadow-xs"
+          className="hidden lg:flex items-center gap-0.5"
         >
           {navLinks.map((link) => {
             const isActive =
@@ -73,7 +73,7 @@ export function Navbar() {
                 to={link.to}
                 className={`relative px-3.5 py-1.5 text-xs sm:text-sm font-sans rounded-full transition-all duration-200 ${
                   isActive
-                    ? "text-primary font-bold bg-accent/90 shadow-xs"
+                    ? "text-primary font-bold underline underline-offset-8"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
                 }`}
               >
@@ -98,21 +98,21 @@ export function Navbar() {
           </Button>
 
           {/* Mobile hamburger */}
-          <button
+          <Button variant="ghost"
             type="button"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={mobileOpen ? "إغلاق القائمة" : "فتح القائمة"}
             aria-expanded={mobileOpen}
-            className="md:hidden p-2 rounded-lg text-foreground hover:bg-muted focus:outline-none focus:ring-1 focus:ring-primary"
+            className="lg:hidden p-2 rounded-lg text-foreground hover:bg-muted focus:outline-none focus:ring-1 focus:ring-primary"
           >
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Mobile Drawer Navigation */}
       {mobileOpen && (
-        <div className="md:hidden border-b border-border bg-background/95 backdrop-blur-lg px-4 pt-2 pb-6 space-y-1.5 animate-in fade-in-50 duration-200">
+        <div className="lg:hidden border-b border-border bg-background/95 backdrop-blur-lg px-4 pt-2 pb-6 space-y-1.5 animate-in fade-in-50 duration-200">
           <div className="py-2 px-3 mb-2 text-xs text-muted-foreground border-b border-border/40 flex items-center justify-between">
             <span>أقسام الموقع</span>
             <span className="text-[11px] text-primary">خضر مأمون</span>

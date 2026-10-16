@@ -48,21 +48,21 @@
 }
 
 :root {
-  --radius: 0.75rem;
-  --background: oklch(0.985 0.003 75);
-  --foreground: oklch(0.24 0.01 60);
-  --ink: oklch(0.16 0.01 55);
+  --radius: 0.5rem;
+  --background: oklch(0.965 0.011 85);
+  --foreground: oklch(0.21 0 0);
+  --ink: oklch(0.21 0 0);
   --card: oklch(0.998 0.001 75);
   --card-foreground: oklch(0.24 0.01 60);
   --popover: oklch(0.998 0.001 75);
   --popover-foreground: oklch(0.24 0.01 60);
-  --primary: oklch(0.36 0.035 55);
+  --primary: oklch(0.59 0.12 42);
   --primary-foreground: oklch(0.99 0.002 75);
   --secondary: oklch(0.955 0.004 75);
   --secondary-foreground: oklch(0.28 0.015 60);
   --muted: oklch(0.955 0.004 75);
   --muted-foreground: oklch(0.48 0.01 60);
-  --accent: oklch(0.94 0.008 75);
+  --accent: oklch(0.90 0.024 56);
   --accent-foreground: oklch(0.22 0.015 60);
   --lavender: oklch(0.92 0.006 75);
   --destructive: oklch(0.58 0.2 25);
@@ -180,7 +180,7 @@
 .editorial-num {
   font-family: var(--font-display);
   font-size: 0.95rem;
-  letter-spacing: 0.05em;
+  letter-spacing: 0;
   color: var(--primary);
   opacity: 0.85;
 }
@@ -228,4 +228,30 @@
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* Reference-inspired editorial composition */
+:root { --hero-shade: linear-gradient(to left, var(--background) 0%, color-mix(in oklab, var(--background) 96%, transparent) 32%, color-mix(in oklab, var(--background) 15%, transparent) 70%, transparent 100%); }
+.hero-stage { position: relative; min-height: 600px; overflow: hidden; }
+.hero-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: left center; }
+.hero-image-shade { position: absolute; inset: 0; background: var(--hero-shade); }
+.hero-heading { position: relative; z-index: 1; padding-top: 38px; }
+.hero-heading h1 { font-size: 88px; line-height: 1.2; font-weight: 700; max-width: 100%; overflow-wrap: anywhere; }
+.hero-word { display: block; font-family: var(--font-sans); font-weight: 700; font-size: 94px; line-height: 1.15; color: var(--foreground); opacity: .11; letter-spacing: 0; }
+.hero-intro { position: relative; z-index: 1; max-width: 450px; padding-top: 22px; padding-bottom: 32px; }
+.editorial-home > section:not(:first-child) { padding-block: 34px; border-top: 1px solid var(--border); }
+.editorial-home > .rule-ornament { display: none; }
+.editorial-home h2 { font-size: 36px; }
+.editorial-skills { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.editorial-skills li { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.editorial-skills li::before { content: '↖'; color: var(--primary); }
+@media (max-width: 767px) {
+  .hero-stage { min-height: 620px; }
+  .hero-heading h1 { font-size: 54px; }
+  .hero-word { font-size: 44px; }
+  .hero-image { object-position: 30% center; }
+  .hero-image-shade { background: linear-gradient(to bottom, var(--background) 0%, color-mix(in oklab, var(--background) 94%, transparent) 52%, color-mix(in oklab, var(--background) 20%, transparent) 100%); }
+  .hero-intro { max-width: 100%; }
+  .editorial-skills { grid-template-columns: 1fr; gap: 24px; }
+  .editorial-home h2 { font-size: 28px; }
 }

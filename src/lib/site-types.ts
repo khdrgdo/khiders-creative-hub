@@ -19,6 +19,7 @@ export interface SocialLinks {
 }
 
 export interface SiteSettings {
+  colors?: import("./site-theme").SiteColors;
   siteName: string;
   tagline: string;
   intro: string;

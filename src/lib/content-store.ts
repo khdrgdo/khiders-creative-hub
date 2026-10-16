@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import { defaultContentItems, initialSiteSettings } from "./mock-data";
+import { useQuery } from "@tanstack/react-query";
+import { siteQuery } from "./queries";
+import { normalizeSettings } from "./site-types";
 import type { ContentItem, SiteSettings } from "./site-types";
 
 const ITEMS_STORAGE_KEY = "khiders_content_items_v2";
@@ -172,35 +175,17 @@ export function useLiveContent(fallbackItems?: ContentItem[]): ContentItem[] {
  * Reactive React hook for components to always render latest site settings
  */
 export function useLiveSettings(fallbackSettings?: SiteSettings): SiteSettings {
-  const [settings, setSettings] = useState<SiteSettings>(() => fallbackSettings || initialSiteSettings);
-
+  const { data } = useQuery(siteQuery);
+  const [localUpdate, setLocalUpdate] = useState<SiteSettings | null>(null);
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    setSettings(getStoredSettings());
-
-    // If settings are not yet initialized, hydrate from public/content.json
-    try {
-      const raw = localStorage.getItem(SETTINGS_STORAGE_KEY);
-      if (!raw) {
-        fetch("/content.json")
-          .then((r) => r.json())
-          .then((data) => {
-            if (data?.settings && typeof data.settings === "object") {
-              saveStoredSettings(data.settings);
-              setSettings(data.settings);
-            }
-          })
-          .catch(() => {});
-      }
-    } catch {}
-
-    function onSettingsChanged(e: any) {
-      if (e.detail) setSettings(e.detail);
+    function onSettingsChanged(event: Event) {
+      const detail = (event as CustomEvent<SiteSettings>).detail;
+      if (detail) setLocalUpdate(detail);
     }
     window.addEventListener("khider_settings_changed", onSettingsChanged);
     return () => window.removeEventListener("khider_settings_changed", onSettingsChanged);
   }, []);
-
-  return settings;
+  if (localUpdate) return localUpdate;
+  if (data?.settings) return normalizeSettings(data.settings);
+  return fallbackSettings || initialSiteSettings;
 }
-

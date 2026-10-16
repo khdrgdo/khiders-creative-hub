@@ -9,6 +9,10 @@ import type { ContentItem } from "@/lib/site-types";
 export const Route = createFileRoute("/research")({
   head: () => ({
     meta: [
+      { property: "og:title", content: "الأبحاث والدراسات المستقلة | خضر مأمون" },
+      { property: "og:description", content: "الأبحاث الأكاديمية والمستقلة في اللسانيات الحاسوبية، الصرف العربي، والسيادة الرقمية." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "الأبحاث والدراسات المستقلة | خضر مأمون" },
       {
         name: "description",

@@ -9,6 +9,10 @@ import type { ContentItem } from "@/lib/site-types";
 export const Route = createFileRoute("/writing")({
   head: () => ({
     meta: [
+      { property: "og:title", content: "الكتابات والمقالات | خضر مأمون" },
+      { property: "og:description", content: "مقالات، رؤى، وتأملات فكرية وفلسفية حول التقنية، الإنسان، واللغة بقلم خضر مأمون." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "الكتابات والمقالات | خضر مأمون" },
       {
         name: "description",

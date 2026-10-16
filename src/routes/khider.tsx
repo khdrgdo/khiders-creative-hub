@@ -52,6 +52,9 @@ import {
 } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { oauthReturnPath } from "@/lib/oauth-return-path";
+import { ColorSettings } from "@/components/admin/ColorSettings";
+import { themeDefaults } from "@/lib/site-theme";
+import { normalizeSettings } from "@/lib/site-types";
 import { ImageUploader } from "@/components/admin/ImageUploader";
 import type { ContentItem, ContentType, SiteSettings } from "@/lib/site-types";
 import { slugify, typeConfig } from "@/lib/site-types";
@@ -69,6 +72,11 @@ export const Route = createFileRoute("/khider")({
   head: () => ({
     meta: [
       { title: "لوحة التحكم الإدارية | خضر مأمون" },
+      { name: "description", content: "إدارة محتوى وألوان موقع خضر مأمون." },
+      { property: "og:title", content: "لوحة التحكم الإدارية | خضر مأمون" },
+      { property: "og:description", content: "إدارة محتوى وألوان موقع خضر مأمون." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
@@ -87,6 +95,7 @@ function KhiderAdminPage() {
   // Data states
   const [items, setItems] = useState<ContentItem[]>([]);
   const [settings, setSettings] = useState<SiteSettings>(getStoredSettings());
+  const [savingSettings, setSavingSettings] = useState(false);
   const [messages, setMessages] = useState<any[]>([]);
   const [activeTypeFilter, setActiveTypeFilter] = useState<string>("all");
 
@@ -168,10 +177,10 @@ function KhiderAdminPage() {
           }
         }
       }
-      // Only apply remote settings if local settings haven't been customized by the user
-      const isCustomized = typeof window !== "undefined" && localStorage.getItem("khiders_settings_customized") === "true";
-      if (!isCustomized && settingsRes.data?.data) {
-        setSettings((prev) => ({ ...prev, ...(settingsRes.data!.data as any) }));
+      if (settingsRes.data?.data) {
+        const remote = normalizeSettings(settingsRes.data.data);
+        setSettings(remote);
+        saveStoredSettings(remote);
       }
       if (msgsRes.data) {
         setMessages(msgsRes.data);
@@ -342,6 +351,7 @@ function KhiderAdminPage() {
       published_at: editingItem.published_at || new Date().toISOString(),
       created_at: editingItem.created_at || new Date().toISOString(),
       updated_at: new Date().toISOString(),
+      deleted_at: editingItem.deleted_at ?? null,
     };
 
     // 1. Update State & Local Store immediately (Guaranteed persistence!)
@@ -394,15 +404,23 @@ function KhiderAdminPage() {
 
   // --- Site Settings Operations ---
 
-  function saveSettings(e: React.FormEvent) {
+  async function saveSettings(e: React.FormEvent) {
     e.preventDefault();
-    if (typeof window !== "undefined") {
-      localStorage.setItem("khiders_settings_customized", "true");
+    setSavingSettings(true);
+    try {
+      const { data: admin, error: adminError } = await supabase.rpc("is_admin");
+      if (adminError || !admin) throw new Error("غير مصرح");
+      const nextSettings = { ...settings, primaryColor: settings.colors?.primary ?? themeDefaults.primary, accentColor: settings.colors?.accent ?? themeDefaults.accent };
+      const { error } = await supabase.from("site_settings").upsert([{ id: 1, data: JSON.parse(JSON.stringify(nextSettings)) }]);
+      if (error) throw error;
+      saveStoredSettings(nextSettings);
+      setSettings(nextSettings);
+      toast.success("تم حفظ إعدادات الموقع والألوان بنجاح.");
+    } catch {
+      toast.error("تعذر حفظ الإعدادات. لم يتم تطبيق التغييرات، حاول مجدداً.");
+    } finally {
+      setSavingSettings(false);
     }
-    saveStoredSettings(settings);
-    toast.success("✅ تم حفظ وتطبيق إعدادات الموقع فورياً في كافة الصفحات!");
-
-    supabase.from("site_settings").upsert([{ id: 1, data: settings as any }]).then(() => {}, () => {});
   }
 
   // --- Backup / Export / Import ---
@@ -770,6 +788,8 @@ function KhiderAdminPage() {
                 </p>
               </div>
 
+              <ColorSettings settings={settings} onChange={setSettings} />
+
               {/* Personal Photo (Portrait / Avatar) */}
               <div className="p-4 sm:p-5 rounded-xl border border-primary/25 bg-accent/20 space-y-3">
                 <div className="flex items-center gap-2">
@@ -1019,8 +1039,8 @@ function KhiderAdminPage() {
                 </div>
               </div>
 
-              <Button type="submit" className="h-9 px-6 text-xs font-bold bg-primary text-primary-foreground">
-                حفظ وتطبيق التغييرات في الموقع
+              <Button type="submit" disabled={savingSettings} className="h-9 px-6 text-xs font-bold bg-primary text-primary-foreground">
+                {savingSettings ? "جارٍ الحفظ…" : "حفظ وتطبيق التغييرات في الموقع"}
               </Button>
             </form>
           </TabsContent>
